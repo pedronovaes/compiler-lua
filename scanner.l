@@ -9,7 +9,9 @@
 %option yywrap
 
 letter			[a-zA-Z]
-number			[0-9]
+float			[0-9]+\.[0-9]+
+number			[0-9]+
+negativeno		\-({float}|{number})
 id 				[a-zA-Z_][a-zA-Z_0-9]*
 
 %%
@@ -31,7 +33,9 @@ id 				[a-zA-Z_][a-zA-Z_0-9]*
 "nil"			printf("<NIL, \"%s\">\n", yytext);
 
 {id}			printf("<ID, \"%s\">\n", yytext);
-{number}*		printf("<NUMBER, \"%d\">\n", atoi(yytext));
+{float}			printf("<FLOAT, \"%s\">\n", yytext);
+{number}		printf("<NUMBER, \"%d\">\n", atoi(yytext));
+{negativeno}	printf("<NEGATIVE NUMBER, \"%s\">\n", yytext);
 
 "+"				printf("<TOKEN_PLUS, \"%s\">\n", yytext);
 "-"				printf("<TOKEN_MINUS, \"%s\">\n", yytext);
