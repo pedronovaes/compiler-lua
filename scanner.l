@@ -1,5 +1,7 @@
 %{
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 %}
 
 %option yylineno
@@ -13,6 +15,7 @@ id					[a-zA-Z_][a-zA-Z_0-9]*
 
 %%
 
+"--"					comments();
 "and"					printf("[T_AND, \"%s\"],\n", yytext);
 "not"					printf("[T_NOT, \"%s\"],\n", yytext);
 "or"					printf("[T_OR, \"%s\"],\n", yytext);
@@ -60,6 +63,18 @@ id					[a-zA-Z_][a-zA-Z_0-9]*
 
 %%
 
-int yywrap(void){
+comments(){
+	char c;
+	while((c = input()) != '\n');
+}
+
+int main(int argc, char *argv[]){
+	yyin = fopen(argv[1], "r");
+	yylex();
+	fclose(yyin);
+	return 0;
+}
+
+int yywrap(){
 	return 1;
 }
