@@ -169,20 +169,7 @@ extern FILE *yyin, *yyout;
 #define EOB_ACT_END_OF_FILE 1
 #define EOB_ACT_LAST_MATCH 2
 
-    /* Note: We specifically omit the test for yy_rule_can_match_eol because it requires
-     *       access to the local variable yy_act. Since yyless() is a macro, it would break
-     *       existing scanners that call yyless() from OUTSIDE yylex. 
-     *       One obvious solution it to make yy_act a global. I tried that, and saw
-     *       a 5% performance hit in a non-yylineno scanner, because yy_act is
-     *       normally declared as a register variable-- so it is not worth it.
-     */
-    #define  YY_LESS_LINENO(n) \
-            do { \
-                int yyl;\
-                for ( yyl = n; yyl < yyleng; ++yyl )\
-                    if ( yytext[yyl] == '\n' )\
-                        --yylineno;\
-            }while(0)
+    #define YY_LESS_LINENO(n)
     
 /* Return all but the first "n" matched characters back to the input stream. */
 #define yyless(n) \
@@ -505,13 +492,6 @@ static yyconst flex_int16_t yy_chk[129] =
        86,   86,   86,   86,   86,   86,   86,   86
     } ;
 
-/* Table of booleans, true if rule could match eol. */
-static yyconst flex_int32_t yy_rule_can_match_eol[40] =
-    {   0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 
-        };
-
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
 
@@ -531,7 +511,9 @@ char *yytext;
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#line 535 "lex.yy.c"
+
+int flag_comma = 1;
+#line 517 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -718,10 +700,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 16 "scanner.l"
+#line 15 "scanner.l"
 
 
-#line 725 "lex.yy.c"
+#line 707 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -793,16 +775,6 @@ yy_find_action:
 
 		YY_DO_BEFORE_ACTION;
 
-		if ( yy_act != YY_END_OF_BUFFER && yy_rule_can_match_eol[yy_act] )
-			{
-			int yyl;
-			for ( yyl = 0; yyl < yyleng; ++yyl )
-				if ( yytext[yyl] == '\n' )
-					   
-    yylineno++;
-;
-			}
-
 do_action:	/* This label is used only to access EOF actions. */
 
 		switch ( yy_act )
@@ -816,204 +788,411 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 18 "scanner.l"
+#line 17 "scanner.l"
 comments();
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
 #line 19 "scanner.l"
-printf("[T_AND, \"%s\"],\n", yytext);
+{
+						if(flag_comma == 1){
+							printf("[T_AND, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_AND, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 20 "scanner.l"
-printf("[T_NOT, \"%s\"],\n", yytext);
+#line 26 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_NOT, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_NOT, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 21 "scanner.l"
-printf("[T_OR, \"%s\"],\n", yytext);
+#line 33 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_OR, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_OR, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 22 "scanner.l"
-printf("[T_ELSEIF, \"%s\"],\n", yytext);
+#line 40 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_ELSEIF, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_ELSEIF, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 23 "scanner.l"
-printf("[T_WHILE, \"%s\"],\n", yytext);
+#line 47 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_WHILE, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_WHILE, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 24 "scanner.l"
-printf("[T_DO, \"%s\"],\n", yytext);
+#line 54 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_DO, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n{T_DO, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 25 "scanner.l"
-printf("[T_FUNCTION, \"%s\"],\n", yytext);
+#line 61 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_FUNCTION, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_FUNCTION, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 26 "scanner.l"
-printf("[T_END, \"%s\"],\n", yytext);
+#line 68 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_END, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_END, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 27 "scanner.l"
-printf("[T_FOR, \"%s\"],\n", yytext);
+#line 75 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_FOR, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_FOR, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 28 "scanner.l"
-printf("[T_ELSE, \"%s\"],\n", yytext);
+#line 82 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_ELSE, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_ELSE, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 29 "scanner.l"
-printf("[T_IF, \"%s\"],\n", yytext);
+#line 89 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_IF, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_IF, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 30 "scanner.l"
-printf("[T_THEN, \"%s\"],\n", yytext);
+#line 96 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_THEN, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_THEN, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 31 "scanner.l"
-printf("[T_RETURN, \"%s\"],\n", yytext);
+#line 103 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_RETURN, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_RETURN, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 32 "scanner.l"
-printf("[T_LOCAL, \"%s\"],\n", yytext);
+#line 110 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_LOCAL, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_LOCAL, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 33 "scanner.l"
-printf("[T_NIL, \"%s\"],\n", yytext);
+#line 117 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_NIL, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_NIL, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 35 "scanner.l"
-printf("[T_NAME, \"%s\"],\n", yytext);
+#line 125 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_NAME, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_NAME, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 36 "scanner.l"
-printf("[T_NUMBER, \"%s\"],\n", yytext);
+#line 132 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_NUMBER, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_NUMBER, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 37 "scanner.l"
-printf("[T_NUMBER, \"%d\"],\n", atoi(yytext));
+#line 139 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_NUMBER, \"%d\"]", atoi(yytext));
+							flag_comma = 0;
+						}else
+							printf(",\n[T_NUMBER, \"%d\"]", atoi(yytext));
+					}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 38 "scanner.l"
-printf("[T_NUMBER, \"%s\"],\n", yytext);
+#line 146 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_NUMBER, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_NUMBER, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 40 "scanner.l"
-printf("[T_PLUS, \"%s\"],\n", yytext);
+#line 154 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_PLUS, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_PLUS, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 41 "scanner.l"
-printf("[T_MINUS, \"%s\"],\n", yytext);
+#line 161 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_MINUS, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_MINUS, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 42 "scanner.l"
-printf("[T_TIMES, \"%s\"],\n", yytext);
+#line 168 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_TIMES, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_TIMES, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 43 "scanner.l"
-printf("[T_DIV, \"%s\"],\n", yytext);
+#line 175 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_DIV, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_DIV, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 45 "scanner.l"
-printf("[T_COMMA, \"%s\"],\n", yytext);
+#line 183 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_COMMA, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_COMMA, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 46 "scanner.l"
-printf("[T_SEMICOL, \"%s\"],\n", yytext);
+#line 190 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_SEMICOL, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_SEMICOL, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 47 "scanner.l"
-printf("[T_ASSIGN, \"%s\"],\n", yytext);
+#line 197 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_ASSIGN, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_ASSIGN, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 48 "scanner.l"
-printf("[T_EQ, \"%s\"],\n", yytext);
+#line 204 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_EQ, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_EQ, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 49 "scanner.l"
-printf("[T_NEQ, \"%s\"],\n", yytext);
+#line 211 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_NEQ, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_NEQ, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 50 "scanner.l"
-printf("[T_LTEQ, \"%s\"],\n", yytext);
+#line 218 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_LTEQ, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_LTEQ, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 51 "scanner.l"
-printf("[T_GTEQ, \"%s\"],\n", yytext);
+#line 225 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_GTEQ, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_GTEQ, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 52 "scanner.l"
-printf("[T_LT, \"%s\"],\n", yytext);
+#line 232 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_LT, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_LT, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 53 "scanner.l"
-printf("[T_GT, \"%s\"],\n", yytext);
+#line 239 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_GT, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_GT, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 54 "scanner.l"
-printf("[T_CLOSEPAR, \"%s\"],\n", yytext);
+#line 246 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_CLOSEPAR, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_CLOSEPAR, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 55 "scanner.l"
-printf("[T_OPENPAR, \"%s\"],\n", yytext);
+#line 253 "scanner.l"
+{
+						if(flag_comma == 1){
+							printf("[T_OPENPAR, \"%s\"]", yytext);
+							flag_comma = 0;
+						}else
+							printf(",\n[T_OPENPAR, \"%s\"]", yytext);
+					}
 	YY_BREAK
 case 36:
 /* rule 36 can match eol */
 YY_RULE_SETUP
-#line 57 "scanner.l"
+#line 261 "scanner.l"
 yylineno++;
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 58 "scanner.l"
+#line 262 "scanner.l"
 ;
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 59 "scanner.l"
+#line 263 "scanner.l"
 {
-						printf("LEXICAL ERROR AT LINE %d: %s\n", yylineno, yytext);
+						if(flag_comma == 1)
+							printf("LEXICAL ERROR AT LINE %d: %s\n", yylineno, yytext);
+						else
+							printf("\nLEXICAL ERROR AT LINE %d: %s", yylineno, yytext);
 						//return 1;
-					}								 
+					}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 64 "scanner.l"
+#line 270 "scanner.l"
 ECHO;
 	YY_BREAK
-#line 1017 "lex.yy.c"
+#line 1196 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1374,10 +1553,6 @@ static int yy_get_next_buffer (void)
 
 	*--yy_cp = (char) c;
 
-    if ( c == '\n' ){
-        --yylineno;
-    }
-
 	(yytext_ptr) = yy_bp;
 	(yy_hold_char) = *yy_cp;
 	(yy_c_buf_p) = yy_cp;
@@ -1452,11 +1627,6 @@ static int yy_get_next_buffer (void)
 	c = *(unsigned char *) (yy_c_buf_p);	/* cast for 8-bit char's */
 	*(yy_c_buf_p) = '\0';	/* preserve yytext */
 	(yy_hold_char) = *++(yy_c_buf_p);
-
-	if ( c == '\n' )
-		   
-    yylineno++;
-;
 
 	return c;
 }
@@ -1928,9 +2098,6 @@ static int yy_init_globals (void)
      * This function is called from yylex_destroy(), so don't allocate here.
      */
 
-    /* We do not touch yylineno unless the option is enabled. */
-    yylineno =  1;
-    
     (yy_buffer_stack) = 0;
     (yy_buffer_stack_top) = 0;
     (yy_buffer_stack_max) = 0;
@@ -2023,23 +2190,25 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 64 "scanner.l"
+#line 270 "scanner.l"
 
 
 
 comments(){
 	char c;
 	while((c = input()) != '\n');
+	yylineno++;
+}
+
+int yywrap(){
+	return 1;
 }
 
 int main(int argc, char *argv[]){
 	yyin = fopen(argv[1], "r");
 	yylex();
 	fclose(yyin);
+	printf("\n");
 	return 0;
-}
-
-int yywrap(){
-	return 1;
 }
 
