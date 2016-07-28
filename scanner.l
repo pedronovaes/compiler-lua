@@ -29,10 +29,10 @@ id					[a-zA-Z_][a-zA-Z_0-9]*
 "local"					printf("[T_LOCAL, \"%s\"],\n", yytext);
 "nil"					printf("[T_NIL, \"%s\"],\n", yytext);
 
-{id}					printf("[T_ID, \"%s\"],\n", yytext);
-{float}					printf("[T_FLOAT, \"%s\"],\n", yytext);
-{number}				printf("[T_POSINT, \"%d\"],\n", atoi(yytext));
-{negativeno}				printf("[T_NEGINT, \"%s\"],\n", yytext);
+{id}					printf("[T_NAME, \"%s\"],\n", yytext);
+{float}					printf("[T_NUMBER, \"%s\"],\n", yytext);
+{number}				printf("[T_NUMBER, \"%d\"],\n", atoi(yytext));
+{negativeno}				printf("[T_NUMBER, \"%s\"],\n", yytext);
 
 "+"					printf("[T_PLUS, \"%s\"],\n", yytext);
 "-"					printf("[T_MINUS, \"%s\"],\n", yytext);
