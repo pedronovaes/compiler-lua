@@ -9,12 +9,13 @@ int flag_comma = 1;
 letter					[a-zA-Z]
 float					[0-9]+\.[0-9]+
 number					[0-9]+
-negativeno				\-({float}|{number})
+/*negativeno				\-({float}|{number})*/
 id					[a-zA-Z_][a-zA-Z_0-9]*
 
 %%
 
-"--"					comments();
+"--"					simple_comment();
+"--["					complex_comment();
 
 "and"					{
 						if(flag_comma == 1){
@@ -143,13 +144,6 @@ id					[a-zA-Z_][a-zA-Z_0-9]*
 						}else
 							printf(",\n[T_NUMBER, \"%d\"]", atoi(yytext));
 					}
-{negativeno}				{
-						if(flag_comma == 1){
-							printf("[T_NUMBER, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							printf(",\n[T_NUMBER, \"%s\"]", yytext);
-					}
 
 "+"					{
 						if(flag_comma == 1){
@@ -261,18 +255,34 @@ id					[a-zA-Z_][a-zA-Z_0-9]*
 \n					yylineno++;
 [ \t]+					;
 .					{
-						if(flag_comma == 1)
-							printf("LEXICAL ERROR AT LINE %d: %s\n", yylineno, yytext);
-						else
-							printf("\nLEXICAL ERROR AT LINE %d: %s", yylineno, yytext);
+						if(flag_comma == 1){
+							printf("LEXICAL ERROR AT LINE %d: %s", yylineno, yytext);
+							flag_comma = 0;
+						}else
+							printf(",\nLEXICAL ERROR AT LINE %d: %s", yylineno, yytext);
 						//return 1;
 					}
 %%
 
-comments(){
+simple_comment(){
 	char c;
 	while((c = input()) != '\n');
 	yylineno++;
+}
+
+complex_comment(){
+	char c;
+	while(1){
+		c = input();
+		if(c == '-'){
+			c = input();
+			if(c == '-'){
+				c = input();
+				if(c == ']')
+					break;
+			}
+		}
+	}
 }
 
 int yywrap(){
