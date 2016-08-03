@@ -1,0 +1,92 @@
+programa	: bloco
+		;
+
+bloco		: comando bloco comandoret
+		|
+		;
+
+comando		: SEMICOL
+		| listadenomes ASSIGN listaexp
+		| chamadadefuncao
+		| DO bloco END
+		| WHILE exp DO bloco END
+		| FOR NAME ASSIGN exp COMMA exp otherexp DO bloco END
+		| IF exp THEN bloco elseif otherelse END
+		| FUNCTION NAME OPENPAR otherlista CLOSEPAR bloco END
+		| LOCAL listadenomes otherlista2
+		;
+
+comandoret	: RETURN otherlistaexp othersemicol
+		;
+
+exp		: NUMBER
+		| NAME
+		| NIL
+		| chamadadefuncao
+		| exp opbin exp
+		| opunaria exp
+		| OPENPAR exp CLOSEPAR
+		;
+
+chamadadefuncao	: NAME OPENPAR otherlistaexp CLOSEPAR
+		;
+
+listadenomes	: NAME othername
+		;
+
+listaexp	: exp otherexp2
+		;
+
+opbin		: TIMES
+		| MINUS
+		| PLUS
+		| DIV
+		| LT
+		| LTEQ
+		| GT
+		| GTEQ
+		| EQ
+		| NTEQ
+		| AND
+		| OR
+		;
+
+opunaria	: MINUS
+		| NOT
+		;
+
+othername	: COMMA listadenomes
+		|
+		;
+
+otherexp	: COMMA exp
+		|
+		;
+
+otherexp2	: COMMA listaexp
+		|
+		;
+
+othersemicol	: SEMICOL
+		|
+		;
+
+elseif		: ELSEIF exp THEN bloco elseif
+		|
+		;
+
+otherelse	: ELSE bloco
+		|
+		;
+
+otherlista	: listadenomes
+		|
+		;
+
+otherlista2	: ASSIGN listaexp
+		|
+		;
+
+otherlistaexp	: listaexp 
+		|
+		;
