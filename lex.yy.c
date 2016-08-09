@@ -802,10 +802,10 @@ YY_RULE_SETUP
 #line 20 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_AND, \"%s\"]", yytext);
+							fprintf(yyout, "[T_AND, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_AND, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_AND, \"%s\"]", yytext);
 						//return AND;
 					}
 	YY_BREAK
@@ -814,10 +814,10 @@ YY_RULE_SETUP
 #line 28 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_NOT, \"%s\"]", yytext);
+							fprintf(yyout, "[T_NOT, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_NOT, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_NOT, \"%s\"]", yytext);
 						//return NOT;
 					}
 	YY_BREAK
@@ -826,10 +826,10 @@ YY_RULE_SETUP
 #line 36 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_OR, \"%s\"]", yytext);
+							fprintf(yyout, "[T_OR, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_OR, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_OR, \"%s\"]", yytext);
 						//return OR;
 					}
 	YY_BREAK
@@ -838,10 +838,10 @@ YY_RULE_SETUP
 #line 44 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_ELSEIF, \"%s\"]", yytext);
+							fprintf(yyout, "[T_ELSEIF, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_ELSEIF, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_ELSEIF, \"%s\"]", yytext);
 						//return ELSEIF;
 					}
 	YY_BREAK
@@ -850,10 +850,10 @@ YY_RULE_SETUP
 #line 52 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_WHILE, \"%s\"]", yytext);
+							fprintf(yyout, "[T_WHILE, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_WHILE, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_WHILE, \"%s\"]", yytext);
 						//return WHILE;
 					}
 	YY_BREAK
@@ -862,10 +862,10 @@ YY_RULE_SETUP
 #line 60 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_DO, \"%s\"]", yytext);
+							fprintf(yyout, "[T_DO, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_DO, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_DO, \"%s\"]", yytext);
 						//return DO;
 					}
 	YY_BREAK
@@ -874,10 +874,10 @@ YY_RULE_SETUP
 #line 68 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_FUNCTION, \"%s\"]", yytext);
+							fprintf(yyout, "[T_FUNCTION, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_FUNCTION, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_FUNCTION, \"%s\"]", yytext);
 						//return FUNCTION;
 					}
 	YY_BREAK
@@ -886,10 +886,10 @@ YY_RULE_SETUP
 #line 76 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_END, \"%s\"]", yytext);
+							fprintf(yyout, "[T_END, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_END, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_END, \"%s\"]", yytext);
 						//return END;
 					}
 	YY_BREAK
@@ -898,10 +898,10 @@ YY_RULE_SETUP
 #line 84 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_FOR, \"%s\"]", yytext);
+							fprintf(yyout, "[T_FOR, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_FOR, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_FOR, \"%s\"]", yytext);
 						//return FOR;
 					}
 	YY_BREAK
@@ -910,10 +910,10 @@ YY_RULE_SETUP
 #line 92 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_ELSE, \"%s\"]", yytext);
+							fprintf(yyout, "[T_ELSE, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_ELSE, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_ELSE, \"%s\"]", yytext);
 						//return ELSE;
 					}
 	YY_BREAK
@@ -922,10 +922,10 @@ YY_RULE_SETUP
 #line 100 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_IF, \"%s\"]", yytext);
+							fprintf(yyout, "[T_IF, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_IF, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_IF, \"%s\"]", yytext);
 						//return IF;
 					}
 	YY_BREAK
@@ -934,10 +934,10 @@ YY_RULE_SETUP
 #line 108 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_THEN, \"%s\"]", yytext);
+							fprintf(yyout, "[T_THEN, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_THEN, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_THEN, \"%s\"]", yytext);
 						//return THEN;
 					}
 	YY_BREAK
@@ -946,10 +946,10 @@ YY_RULE_SETUP
 #line 116 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_RETURN, \"%s\"]", yytext);
+							fprintf(yyout, "[T_RETURN, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_RETURN, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_RETURN, \"%s\"]", yytext);
 						//return RETURN;
 					}
 	YY_BREAK
@@ -958,10 +958,10 @@ YY_RULE_SETUP
 #line 124 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_LOCAL, \"%s\"]", yytext);
+							fprintf(yyout, "[T_LOCAL, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_LOCAL, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_LOCAL, \"%s\"]", yytext);
 						//return LOCAL;
 					}
 	YY_BREAK
@@ -970,10 +970,10 @@ YY_RULE_SETUP
 #line 132 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_NIL, \"%s\"]", yytext);
+							fprintf(yyout, "[T_NIL, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_NIL, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_NIL, \"%s\"]", yytext);
 						//return NIL;
 					}
 	YY_BREAK
@@ -982,10 +982,10 @@ YY_RULE_SETUP
 #line 141 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_NAME, \"%s\"]", yytext);
+							fprintf(yyout, "[T_NAME, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_NAME, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_NAME, \"%s\"]", yytext);
 						//return NAME;
 					}
 	YY_BREAK
@@ -994,10 +994,10 @@ YY_RULE_SETUP
 #line 149 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_NUMBER, \"%s\"]", yytext);
+							fprintf(yyout, "[T_NUMBER, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_NUMBER, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_NUMBER, \"%s\"]", yytext);
 						//return NUMBER;
 					}
 	YY_BREAK
@@ -1006,10 +1006,10 @@ YY_RULE_SETUP
 #line 157 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_NUMBER, \"%d\"]", atoi(yytext));
+							fprintf(yyout, "[T_NUMBER, \"%d\"]", atoi(yytext));
 							flag_comma = 0;
 						}else
-							printf(",\n[T_NUMBER, \"%d\"]", atoi(yytext));
+							fprintf(yyout, ",\n[T_NUMBER, \"%d\"]", atoi(yytext));
 						//return NUMBER;
 					}
 	YY_BREAK
@@ -1018,10 +1018,10 @@ YY_RULE_SETUP
 #line 166 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_PLUS, \"%s\"]", yytext);
+							fprintf(yyout, "[T_PLUS, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_PLUS, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_PLUS, \"%s\"]", yytext);
 						//return PLUS;
 					}
 	YY_BREAK
@@ -1030,10 +1030,10 @@ YY_RULE_SETUP
 #line 174 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_MINUS, \"%s\"]", yytext);
+							fprintf(yyout, "[T_MINUS, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_MINUS, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_MINUS, \"%s\"]", yytext);
 						//return MINUS;
 					}
 	YY_BREAK
@@ -1042,10 +1042,10 @@ YY_RULE_SETUP
 #line 182 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_TIMES, \"%s\"]", yytext);
+							fprintf(yyout, "[T_TIMES, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_TIMES, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_TIMES, \"%s\"]", yytext);
 						//return TIMES;
 					}
 	YY_BREAK
@@ -1054,10 +1054,10 @@ YY_RULE_SETUP
 #line 190 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_DIV, \"%s\"]", yytext);
+							fprintf(yyout, "[T_DIV, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_DIV, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_DIV, \"%s\"]", yytext);
 						//return DIV;
 					}
 	YY_BREAK
@@ -1066,10 +1066,10 @@ YY_RULE_SETUP
 #line 199 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_COMMA, \"%s\"]", yytext);
+							fprintf(yyout, "[T_COMMA, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_COMMA, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_COMMA, \"%s\"]", yytext);
 						//return COMMA;
 					}
 	YY_BREAK
@@ -1078,10 +1078,10 @@ YY_RULE_SETUP
 #line 207 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_SEMICOL, \"%s\"]", yytext);
+							fprintf(yyout, "[T_SEMICOL, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_SEMICOL, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_SEMICOL, \"%s\"]", yytext);
 						//return SEMICOL;
 					}
 	YY_BREAK
@@ -1090,10 +1090,10 @@ YY_RULE_SETUP
 #line 215 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_ASSIGN, \"%s\"]", yytext);
+							fprintf(yyout, "[T_ASSIGN, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_ASSIGN, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_ASSIGN, \"%s\"]", yytext);
 						//return ASSIGN;
 					}
 	YY_BREAK
@@ -1102,10 +1102,10 @@ YY_RULE_SETUP
 #line 223 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_EQ, \"%s\"]", yytext);
+							fprintf(yyout, "[T_EQ, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_EQ, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_EQ, \"%s\"]", yytext);
 						//return EQ;
 					}
 	YY_BREAK
@@ -1114,10 +1114,10 @@ YY_RULE_SETUP
 #line 231 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_NEQ, \"%s\"]", yytext);
+							fprintf(yyout, "[T_NEQ, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_NEQ, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_NEQ, \"%s\"]", yytext);
 						//return NEQ;
 					}
 	YY_BREAK
@@ -1126,10 +1126,10 @@ YY_RULE_SETUP
 #line 239 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_LTEQ, \"%s\"]", yytext);
+							fprintf(yyout, "[T_LTEQ, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_LTEQ, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_LTEQ, \"%s\"]", yytext);
 						//return LTEQ;
 					}
 	YY_BREAK
@@ -1138,10 +1138,10 @@ YY_RULE_SETUP
 #line 247 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_GTEQ, \"%s\"]", yytext);
+							fprintf(yyout, "[T_GTEQ, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_GTEQ, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_GTEQ, \"%s\"]", yytext);
 						//return GTEQ;
 					}
 	YY_BREAK
@@ -1150,10 +1150,10 @@ YY_RULE_SETUP
 #line 255 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_LT, \"%s\"]", yytext);
+							fprintf(yyout, "[T_LT, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_LT, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_LT, \"%s\"]", yytext);
 						//return LT;
 					}
 	YY_BREAK
@@ -1162,10 +1162,10 @@ YY_RULE_SETUP
 #line 263 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_GT, \"%s\"]", yytext);
+							fprintf(yyout, "[T_GT, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_GT, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_GT, \"%s\"]", yytext);
 						//return GT;
 					}
 	YY_BREAK
@@ -1174,10 +1174,10 @@ YY_RULE_SETUP
 #line 271 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_CLOSEPAR, \"%s\"]", yytext);
+							fprintf(yyout, "[T_CLOSEPAR, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_CLOSEPAR, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_CLOSEPAR, \"%s\"]", yytext);
 						//return CLOSEPAR;
 					}
 	YY_BREAK
@@ -1186,10 +1186,10 @@ YY_RULE_SETUP
 #line 279 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("[T_OPENPAR, \"%s\"]", yytext);
+							fprintf(yyout, "[T_OPENPAR, \"%s\"]", yytext);
 							flag_comma = 0;
 						}else
-							printf(",\n[T_OPENPAR, \"%s\"]", yytext);
+							fprintf(yyout, ",\n[T_OPENPAR, \"%s\"]", yytext);
 						//return OPENPAR;
 					}
 	YY_BREAK
@@ -1209,10 +1209,10 @@ YY_RULE_SETUP
 #line 290 "scanner.l"
 {
 						if(flag_comma == 1){
-							printf("LEXICAL ERROR AT LINE %d: %s", yylineno, yytext);
+							fprintf(yyout, "LEXICAL ERROR AT LINE %d: %s", yylineno, yytext);
 							flag_comma = 0;
 						}else
-							printf(",\nLEXICAL ERROR AT LINE %d: %s", yylineno, yytext);
+							fprintf(yyout, ",\nLEXICAL ERROR AT LINE %d: %s", yylineno, yytext);
 						//return 1;
 					}
 	YY_BREAK
@@ -2256,9 +2256,11 @@ int yywrap(){
 
 int main(int argc, char *argv[]){
 	yyin = fopen(argv[1], "r");
+	yyout = fopen(argv[2], "w");
 	yylex();
 	fclose(yyin);
-	printf("\n");
+	fprintf(yyout, "\n");
+	fclose(yyout);
 	return 0;
 }
 

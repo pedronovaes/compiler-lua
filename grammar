@@ -46,7 +46,7 @@ opbin		: TIMES
 		| GT
 		| GTEQ
 		| EQ
-		| NTEQ
+		| NEQ
 		| AND
 		| OR
 		;
