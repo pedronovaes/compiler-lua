@@ -19,284 +19,166 @@ id					[a-zA-Z_][a-zA-Z_0-9]*
 "--["					complex_comment();
 
 "and"					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_AND, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_AND, \"%s\"]", yytext);
+						print_token("T_AND");
 						//return AND;
 					}
 "not"					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_NOT, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_NOT, \"%s\"]", yytext);
+						print_token("T_NOT");
 						//return NOT;
 					}
 "or"					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_OR, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_OR, \"%s\"]", yytext);
+						print_token("T_OR");
 						//return OR;
 					}
 "elseif"				{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_ELSEIF, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_ELSEIF, \"%s\"]", yytext);
+						print_token("T_ELSEIF");
 						//return ELSEIF;
 					}
 "while"					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_WHILE, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_WHILE, \"%s\"]", yytext);
+						print_token("T_WHILE");
 						//return WHILE;
 					}
 "do"					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_DO, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_DO, \"%s\"]", yytext);
+						print_token("T_DO");
 						//return DO;
 					}
 "function"				{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_FUNCTION, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_FUNCTION, \"%s\"]", yytext);
+						print_token("T_FUNCTION");
 						//return FUNCTION;
 					}
 "end"					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_END, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_END, \"%s\"]", yytext);
+						print_token("T_END");
 						//return END;
 					}
 "for"					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_FOR, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_FOR, \"%s\"]", yytext);
+						print_token("T_FOR");
 						//return FOR;
 					}
 "else"					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_ELSE, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_ELSE, \"%s\"]", yytext);
+						print_token("T_ELSE");
 						//return ELSE;
 					}
 "if"					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_IF, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_IF, \"%s\"]", yytext);
+						print_token("T_IF");
 						//return IF;
 					}
 "then"					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_THEN, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_THEN, \"%s\"]", yytext);
+						print_token("T_THEN");
 						//return THEN;
 					}
 "return"				{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_RETURN, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_RETURN, \"%s\"]", yytext);
+						print_token("T_RETURN");
 						//return RETURN;
 					}
 "local"					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_LOCAL, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_LOCAL, \"%s\"]", yytext);
+						print_token("T_LOCAL");
 						//return LOCAL;
 					}
 "nil"					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_NIL, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_NIL, \"%s\"]", yytext);
+						print_token("T_NIL");
 						//return NIL;
 					}
 
 {id}					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_NAME, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_NAME, \"%s\"]", yytext);
+						print_token("T_NAME");
 						//return NAME;
 					}
 {float}					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_NUMBER, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_NUMBER, \"%s\"]", yytext);
+						print_token("T_NUMBER");
 						//return NUMBER;
 					}
 {number}				{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_NUMBER, \"%d\"]", atoi(yytext));
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_NUMBER, \"%d\"]", atoi(yytext));
+						print_token("T_NUMBER");
 						//return NUMBER;
 					}
 
 "+"					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_PLUS, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_PLUS, \"%s\"]", yytext);
+						print_token("T_PLUS");
 						//return PLUS;
 					}
 "-"					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_MINUS, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_MINUS, \"%s\"]", yytext);
+						print_token("T_MINUS");
 						//return MINUS;
 					}
 "*"					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_TIMES, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_TIMES, \"%s\"]", yytext);
+						print_token("T_TIMES");
 						//return TIMES;
 					}
 "/"					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_DIV, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_DIV, \"%s\"]", yytext);
+						print_token("T_DIV");
 						//return DIV;
 					}
 
 ","					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_COMMA, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_COMMA, \"%s\"]", yytext);
+						print_token("T_COMMA");
 						//return COMMA;
 					}
 ";"					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_SEMICOL, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_SEMICOL, \"%s\"]", yytext);
+						print_token("T_SEMICOL");
 						//return SEMICOL;
 					}
 "="					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_ASSIGN, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_ASSIGN, \"%s\"]", yytext);
+						print_token("T_ASSIGN");
 						//return ASSIGN;
 					}
 "=="					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_EQ, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_EQ, \"%s\"]", yytext);
+						print_token("T_EQ");
 						//return EQ;
 					}
 "~="					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_NEQ, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_NEQ, \"%s\"]", yytext);
+						print_token("T_NEQ");
 						//return NEQ;
 					}
 "<="					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_LTEQ, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_LTEQ, \"%s\"]", yytext);
+						print_token("T_LTEQ");
 						//return LTEQ;
 					}
 ">="					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_GTEQ, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_GTEQ, \"%s\"]", yytext);
+						print_token("T_GTEQ");
 						//return GTEQ;
 					}
 "<"					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_LT, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_LT, \"%s\"]", yytext);
+						print_token("T_LT");
 						//return LT;
 					}
 ">"					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_GT, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_GT, \"%s\"]", yytext);
+						print_token("T_GT");
 						//return GT;
 					}
 ")"					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_CLOSEPAR, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_CLOSEPAR, \"%s\"]", yytext);
+						print_token("T_CLOSEPAR");
 						//return CLOSEPAR;
 					}
 "("					{
-						if(flag_comma == 1){
-							fprintf(yyout, "[T_OPENPAR, \"%s\"]", yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\n[T_OPENPAR, \"%s\"]", yytext);
+						print_token("T_OPENPAR");
 						//return OPENPAR;
 					}
 
 \n					yylineno++;
 [ \t]+					;
 .					{
-						if(flag_comma == 1){
-							fprintf(yyout, "LEXICAL ERROR AT LINE %d: %s", yylineno, yytext);
-							flag_comma = 0;
-						}else
-							fprintf(yyout, ",\nLEXICAL ERROR AT LINE %d: %s", yylineno, yytext);
+						print_error();
 						//return 1;
 					}
 %%
+
+print_token(char *tokentype){
+	if(flag_comma == 1){
+		fprintf(yyout, "[%s, \"%s\"]", tokentype, yytext);
+		flag_comma = 0;
+	}
+	else
+		fprintf(yyout, ",\n[%s, \"%s\"]", tokentype, yytext);
+}
+
+print_error(){
+	if(flag_comma == 1){
+		fprintf(yyout, "LEXICAL ERROR AT LINE %d: %s", yylineno, yytext);
+		flag_comma = 0;
+	}
+	else
+		fprintf(yyout, ",\nLEXICAL ERROR AT LINE %d: %s", yylineno, yytext);
+}
 
 simple_comment(){
 	char c;
