@@ -55,7 +55,8 @@ tipoTree *treeRoot = NULL;
 
 %%
 
-programa	: bloco { treeRoot = $1; };
+programa	:
+		| bloco { treeRoot = $1; };
 
 bloco		: comando bloco comandoret { $$ = cria_node(BLOCO, 3, $1, $2, $3); }
 		;
