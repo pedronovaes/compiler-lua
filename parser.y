@@ -55,10 +55,10 @@ tipoTree *treeRoot = NULL;
 
 %%
 
-programa	:
-		| bloco { treeRoot = $1; };
+programa: bloco { treeRoot = $1; };
 
-bloco		: comando bloco comandoret { $$ = cria_node(BLOCO, 3, $1, $2, $3); }
+bloco	:
+		| comando bloco comandoret { $$ = cria_node(BLOCO, 3, $1, $2, $3); }
 		;
 comando		: SEMICOL { $$ = cria_node(SEMICOL, 1, terminalToken($1) ); }
 		| listadenomes ASSIGN listaexp { $$ = cria_node(ASSIGN, 2, $1, $3); }
@@ -86,13 +86,13 @@ exp		: NUMBER { $$ = terminalNumber($1); }
 chamadadefuncao	: NAME OPENPAR otherlistaexp CLOSEPAR { $$ = cria_node(FUNCALL, 4, terminalToken($1), terminalToken($2), $3, terminalToken($4)); }
 		;
 
-listadenomes	: NAME othername { $$ = cria_node(LIST_N, 2, terminalToken($1), $2); }
+listadenomes: NAME othername { $$ = cria_node(LIST_N, 2, terminalToken($1), $2); }
 		;
 
-listaexp	: exp otherexp2 { $$ = cria_node(LISTEXP_N, 2, $1, $2); }
+listaexp: exp otherexp2 { $$ = cria_node(LISTEXP_N, 2, $1, $2); }
 		;
 
-opbin		: TIMES { $$ = terminalToken($1); }
+opbin	: TIMES { $$ = terminalToken($1); }
 		| MINUS { $$ = terminalToken($1); }
 		| PLUS { $$ = terminalToken($1); }
 		| DIV { $$ = terminalToken($1); }
@@ -110,31 +110,40 @@ opunaria	: MINUS { $$ = terminalToken($1); }
 		| NOT { $$ = terminalToken($1); }
 		;
 
-othername	: COMMA listadenomes { $$ = cria_node(COMMA, 2, terminalToken($1), $2); }
+othername:
+		| COMMA listadenomes { $$ = cria_node(COMMA, 2, terminalToken($1), $2); }
 		;
 
-otherexp	: COMMA exp { $$ = cria_node(COMMA, 2, terminalToken($1), $2); }
+otherexp:
+		| COMMA exp { $$ = cria_node(COMMA, 2, terminalToken($1), $2); }
 		;
 
-otherexp2	: COMMA listaexp { $$ = cria_node(COMMA, 2, terminalToken($1), $2); }
+otherexp2:
+		| COMMA listaexp { $$ = cria_node(COMMA, 2, terminalToken($1), $2); }
 		;
 
-othersemicol	: SEMICOL {$$ = terminalToken($1)}
+othersemicol	:
+		| SEMICOL {$$ = terminalToken($1)}
 		;
 
-elseif		: ELSEIF exp THEN bloco elseif { $$ = cria_node(COMANDO_N, 5, terminalToken($1), $2, terminalToken($3), $4, $5); }
+elseif	:
+		| ELSEIF exp THEN bloco elseif { $$ = cria_node(COMANDO_N, 5, terminalToken($1), $2, terminalToken($3), $4, $5); }
 		;
 
-otherelse	: ELSE bloco { $$ = cria_node(ELSE, 2, terminalToken($1), $2); }
+otherelse	:
+		| ELSE bloco { $$ = cria_node(ELSE, 2, terminalToken($1), $2); }
 		;
 
-otherlista	: listadenomes { $$ = cria_node(LIST_N, 0,$1) }
+otherlista	:
+		| listadenomes { $$ = cria_node(LIST_N, 0,$1) }
 		;
 
-otherlista2	: ASSIGN listaexp { $$ = cria_node(ASSIGN, 2, terminalToken($1), $2); }
+otherlista2	:
+		| ASSIGN listaexp { $$ = cria_node(ASSIGN, 2, terminalToken($1), $2); }
 		;
 
-otherlistaexp	: listaexp { $$ = cria_node(LISTEXP_N, 0, $1) }
+otherlistaexp	:
+		| listaexp { $$ = cria_node(LISTEXP_N, 0, $1) }
 		;
 
 %%
