@@ -3,52 +3,43 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
-
-struct treeNode {
-	int tokenNumber;
-	int num_filhos;
-	int number;
-	char id[20];
-	struct treeNode **filhos;
-};
-
-void yyerror(char *string);
-struct treeNode * cria_node(int token_n, int n_filhos, ...);
-struct treeNode * terminalNumber(int token_n, int token);
-struct treeNode * terminalToken(int token_n, char *id);
-
-
-struct treeNode *treeRoot = NULL;
-
-%}
-
+#include <parser.h>
 
 %union {
 	int integer; 
 	char id[20];
-	treeNode *treePointer;
+	tipoTree *treePointer;
 };
 
-%start programa
+void yyerror(char *string);
+tipoTree * cria_node(int token_n, int n_filhos, ...);
+tipoTree * terminalNumber(int token_n);
+tipoTree * terminalToken(int token_n);
 
-%token SEMICOL ASSIGN 
-%token DO END WHILE
-%token FOR COMMA
-%token IF THEN FUNCTION NAME ELSEIF ELSE
-%token OPENPAR CLOSEPAR
-%token LOCAL RETURN NIL
-%token TIMES MINUS PLUS DIV LT LTEQ GT GTEQ EQ NEQ AND OR
-%token BLOCO
-%token FUNCALL
-%token COMANDO_N
-%token RETURN_N
-%token EXP_N
-%token LIST_N
-%token LISTEXP_N
+tipoTree *treeRoot = NULL;
+
+%}
+
+
+%token <integer> SEMICOL ASSIGN 
+%token <integer> DO END WHILE
+%token <integer> FOR COMMA
+%token <integer> IF THEN FUNCTION ELSEIF ELSE
+%token <integer> OPENPAR CLOSEPAR
+%token <integer> LOCAL RETURN NIL
+%token <integer> TIMES MINUS PLUS DIV LT LTEQ GT GTEQ EQ NEQ AND OR
+%token <integer> BLOCO
+%token <integer> FUNCALL
+%token <integer> COMANDO_N
+%token <integer> RETURN_N
+%token <integer> EXP_N
+%token <integer> LIST_N
+%token <integer> LISTEXP_N
+%token <integer> NOT
 
 %token <id> NAME
 %token <integer> NUMBER
-%type <treePointer> programa bloco comando comandorep exp chamadadefuncao listadenomes listaexp opbin opunaria othername otherexp otherexp2 othersemicol elseif otherelse otherlista otherlista2 otherlistaexp
+%type <treePointer> programa bloco comando comandoret exp chamadadefuncao listadenomes listaexp opbin opunaria othername otherexp otherexp2 othersemicol elseif otherelse otherlista otherlista2 otherlistaexp
 
 //%nonassoc IFX
 //%nonassoc ELSE
@@ -60,15 +51,15 @@ struct treeNode *treeRoot = NULL;
 %left TIMES DIV
 %left OPENPAR CLOSEPAR
 
+%start programa
+
 %%
 
-programa	: bloco { treeRoot = $1; }
-		;
+programa	: bloco { treeRoot = $1; };
 
 bloco		: comando bloco comandoret { $$ = cria_node(BLOCO, 3, $1, $2, $3); }
-		|
 		;
-comando		: SEMICOL { $$ = cria_node(SEMICOL, 1, terminalToken($1)); }
+comando		: SEMICOL { $$ = cria_node(SEMICOL, 1, terminalToken($1) ); }
 		| listadenomes ASSIGN listaexp { $$ = cria_node(ASSIGN, 2, $1, $3); }
 		| chamadadefuncao { $$ = cria_node(FUNCALL,1,$1); }
 		| DO bloco END { $$ = cria_node(BLOCO, 3, terminalToken($1), $2, terminalToken($3)); }
@@ -119,48 +110,39 @@ opunaria	: MINUS { $$ = terminalToken($1); }
 		;
 
 othername	: COMMA listadenomes { $$ = cria_node(COMMA, 2, terminalToken($1), $2); }
-		|
 		;
 
 otherexp	: COMMA exp { $$ = cria_node(COMMA, 2, terminalToken($1), $2); }
-		|
 		;
 
 otherexp2	: COMMA listaexp { $$ = cria_node(COMMA, 2, terminalToken($1), $2); }
-		|
 		;
 
 othersemicol	: SEMICOL {$$ = terminalToken($1)}
-		|
 		;
 
 elseif		: ELSEIF exp THEN bloco elseif { $$ = cria_node(COMANDO_N, 5, terminalToken($1), $2, terminalToken($3), $4, $5); }
-		|
 		;
 
 otherelse	: ELSE bloco { $$ = cria_node(ELSE, 2, terminalToken($1), $2); }
-		|
 		;
 
 otherlista	: listadenomes { $$ = cria_node(LIST_N, 0,$1) }
-		|
 		;
 
 otherlista2	: ASSIGN listaexp { $$ = cria_node(ASSIGN, 2, terminalToken($1), $2); }
-		|
 		;
 
 otherlistaexp	: listaexp { $$ = cria_node(LISTEXP_N, 0, $1) }
-		|
 		;
 
 %%
 
-struct treeNode * cria_node(int token_n, int n_filhos, ...){
+tipoTree * cria_node(int token_n, int n_filhos, ...){
 
 	va_list params;
 	int i = 0;
-	struct treeNode *aux = malloc(sizeof(struct treeNode));
+	tipoTree *aux = malloc(sizeof(struct treeNode));
 	aux->tokenNumber = token;
 	aux->num_filhos = n_filhos;
 	aux->filhos = malloc(n_filhos * sizeof(struct treeNode));
@@ -176,24 +158,23 @@ struct treeNode * cria_node(int token_n, int n_filhos, ...){
 	return aux;
 }
 
-struct treeNode * terminalNumber(int token_n, int token){
+tipoTree * terminalNumber(int token_n){
 
-	struct treeNode *aux = malloc(sizeof(struct treeNode));
+	tipoTree *aux = malloc(sizeof(struct treeNode));
 	aux->num_filhos = 0;
 	aux->tokenNumber = token_n;
-	aux->number = token;
+//	aux->number = token;
 	aux->id = NULL;
 	return aux;
 }
 
-struct treeNode * terminalToken(int token_n, char *id){
+tipoTree * terminalToken(int token_n){
 	
-	struct treeNode *aux = malloc(sizeof(struct treeNode));
+	tipoTree *aux = malloc(sizeof(struct treeNode));
 	aux->num_filhos = 0;
 	aux->tokenNumber = token_n;
-	strcpy(aux->id, id);
+	//strcpy(aux->id, id);
 	return aux;
-
 }
 
 void yyerror(char *string){  fprintf(stderr, "%s\n", string); }
