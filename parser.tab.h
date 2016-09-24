@@ -30,8 +30,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_YY_Y_TAB_H_INCLUDED
-# define YY_YY_Y_TAB_H_INCLUDED
+#ifndef YY_YY_PARSER_TAB_H_INCLUDED
+# define YY_YY_PARSER_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -86,59 +86,19 @@ extern int yydebug;
     NUMBER = 296
   };
 #endif
-/* Tokens.  */
-#define SEMICOL 258
-#define ASSIGN 259
-#define DO 260
-#define END 261
-#define WHILE 262
-#define FOR 263
-#define COMMA 264
-#define IF 265
-#define THEN 266
-#define FUNCTION 267
-#define ELSEIF 268
-#define ELSE 269
-#define OPENPAR 270
-#define CLOSEPAR 271
-#define LOCAL 272
-#define RETURN 273
-#define NIL 274
-#define TIMES 275
-#define MINUS 276
-#define PLUS 277
-#define DIV 278
-#define LT 279
-#define LTEQ 280
-#define GT 281
-#define GTEQ 282
-#define EQ 283
-#define NEQ 284
-#define AND 285
-#define OR 286
-#define BLOCO 287
-#define FUNCALL 288
-#define COMANDO_N 289
-#define RETURN_N 290
-#define EXP_N 291
-#define LIST_N 292
-#define LISTEXP_N 293
-#define NOT 294
-#define NAME 295
-#define NUMBER 296
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 18 "parser.y" /* yacc.c:1909  */
+#line 17 "parser.y" /* yacc.c:1909  */
 
 	tipoTree *treePointer;
 	int integer; 
 	char id[20];
 
-#line 142 "y.tab.h" /* yacc.c:1909  */
+#line 102 "parser.tab.h" /* yacc.c:1909  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
@@ -149,4 +109,4 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_Y_TAB_H_INCLUDED  */
+#endif /* !YY_YY_PARSER_TAB_H_INCLUDED  */

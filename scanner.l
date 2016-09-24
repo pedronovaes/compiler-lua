@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <y.tab.h>
+#include "parser.h"
+#include "y.tab.h"
 
 int flag_comma = 1;
 %}
@@ -207,8 +208,8 @@ complex_comment(){
 	}
 }
 
-int yywrap(){
-	return 1;
+int yywrap(void) {
+    return 1;
 }
 
 int main(int argc, char *argv[]){
