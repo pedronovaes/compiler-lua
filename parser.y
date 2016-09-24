@@ -38,7 +38,7 @@ tipoTree *treeRoot = NULL;
 
 %token <id> NAME
 %token <integer> NUMBER
-%type <treePointer> programa bloco comando comandoret exp chamadadefuncao listadenomes listaexp opbin opunaria othername otherexp otherexp2 othersemicol elseif otherelse otherlista otherlista2 otherlistaexp
+%type <treePointer> programa bloco comando otherexp elseif else optionListanome assignlistaexp comandoret optionListaexp optionSemicol exp chamadadefuncao listadenomes commaNome listaexp commaExp opbin opunaria
 
 //%nonassoc IFX
 //%nonassoc ELSE
@@ -56,46 +56,85 @@ tipoTree *treeRoot = NULL;
 
 %%
 
-programa: bloco { treeRoot = $1; };
-
-bloco	: {$$ = NULL}
-		| comando bloco comandoret { $$ = cria_node(BLOCO, 3, $1, $2, $3); }
-		;
-comando		: SEMICOL { $$ = cria_node(SEMICOL, 1, terminalToken($1) ); }
-		| listadenomes ASSIGN listaexp { $$ = cria_node(ASSIGN, 2, $1, $3); }
-		| chamadadefuncao { $$ = cria_node(FUNCALL,1,$1); }
-		| DO bloco END { $$ = cria_node(BLOCO, 3, terminalToken($1), $2, terminalToken($3)); }
-		| WHILE exp DO bloco END { $$ = cria_node(COMANDO_N, 5, terminalToken($1), $2, terminalToken($3), $4, terminalToken($5)); }
-		| FOR NAME ASSIGN exp COMMA exp otherexp DO bloco END {$$ = cria_node(COMANDO_N, 10, terminalToken($1), terminalToken($2), terminalToken($3), $4, terminalToken($5), $6, $7, terminalToken($8), $9, terminalToken($10) ); }
-		| IF exp THEN bloco elseif otherelse END { $$ = cria_node(COMANDO_N, 7, terminalToken($1), $2, terminalToken($3), $4, $5, $6, terminalToken($7)); }
-		| FUNCTION NAME OPENPAR otherlista CLOSEPAR bloco END { $$ = cria_node(COMANDO_N, 7, terminalToken($1), terminalToken($2), terminalToken($3), $4, terminalToken($5), $6, terminalToken($7)); }
-		| LOCAL listadenomes otherlista2 { $$ = cria_node(COMANDO_N, 3, terminalToken($1), $2, $3); }
+programa	: bloco { treeRoot = $1; }
 		;
 
-comandoret	: RETURN otherlistaexp othersemicol { $$ = cria_node(RETURN_N, 3, terminalToken($1), $2, $3); }
+bloco	: {$$ = NULL;}
+		| comando bloco { $$ = cria_node(BLOCO, 2, $1, $2) }
+		| comandoret { $$ = cria_node(BLOCO, 1, $1); }
 		;
 
-exp		: NUMBER { $$ = terminalNumber($1); }
+comando		: SEMICOL { $$ = cria_node(COMANDO_N, 1, $1);}
+		| listadenomes ASSIGN listaexp {$$ = cria_node(ASSIGN, 2, $1, $3); }
+		| chamadadefuncao {$$ = cria_node(COMANDO_N, $1); }
+		| DO bloco END {$$ = cria_node(COMANDO_N, 3, terminalToken($1), terminalToken($3)); }
+		| WHILE exp DO bloco END {$$ = cria_node(COMANDO_N, 5, terminalToken($1), $2, terminalToken($3), $4, terminalToken($5)); }
+		| FOR NAME ASSIGN exp COMMA exp otherexp DO bloco END FOR NAME ASSIGN exp COMMA exp otherexp DO bloco END {$$ = cria_node(COMANDO_N, 10, terminalToken($1), terminalToken($2), terminalToken($3), $4, terminalToken($5), $6, $7, terminalToken($8), $9, terminalToken($10) ); }
+		| IF exp THEN bloco elseif else END { $$ = cria_node(COMANDO_N, 7, terminalToken($1), $2, terminalToken($3), $4, $5, $6, terminalToken($7)); }
+		| FUNCTION NAME OPENPAR optionListanome CLOSEPAR bloco END {$$ = cria_node(FUNCALL, 7, terminalToken($1), terminalToken($2), terminalToken($3), $4, terminalToken($5), $6, terminalToken($7)); }
+		| LOCAL listadenomes assignlistaexp { $$ = cria_node(COMANDO_N, 3, terminalToken($1), $2, $3); }
+		;
+
+otherexp: { $$ = NULL; }
+		| COMMA exp { cria_node(LISTEXP_N, 2, terminalToken($1), $2); }
+		;
+
+elseif	: { $$ = NULL; }
+		| elseif ELSEIF exp THEN bloco { $$ = cria_node(COMANDO_N, 5, $1, terminalToken($2), $3, terminalToken($4), $5); }
+		;
+
+else	: {$$ = NULL; }
+		| ELSE bloco { $$ = cria_node(COMANDO_N, 2, terminalToken($1), $2); }
+		;
+
+optionListanome	: {$$ = NULL;}
+		| listadenomes { $$ = cria_node(LIST_N, 1, $1); }
+		;
+
+assignlistaexp	: { $$ = NULL;}
+		| ASSIGN listaexp { $$ = cria_node(ASSIGN, 2, terminalToken($1), $2); }
+		;
+
+comandoret	: RETURN optionListaexp optionSemicol { $$ = cria_node(RETURN_N, 3, terminalToken($1), $2, $3); }
+		;
+
+optionListaexp	: { $$ = NULL; }
+		| listaexp { $$ = cria_node(LIST_N, 1, $1); }
+		;
+
+optionSemicol	: { $$ = NULL; }
+		| SEMICOL { $$ = terminalToken($1); }
+		;
+
+exp		: NUMBER { $$ = terminalToken($1); }
 		| NAME { $$ = terminalToken($1); }
 		| NIL { $$ = terminalToken($1); }
-		| chamadadefuncao { $$ = cria_node(FUNCALL, 0,$1); }
-		| exp opbin exp { $$ = cria_node(EXP_N, 3, $1, $2, $3); }
+		| chamadadefuncao { $$ = cria_node(FUNCALL, 1, $1); }
+		| exp opbin exp { $$ = cria_node(LISTEXP_N, 3, $1, $2 ,$3); }
 		| opunaria exp { $$ = cria_node(EXP_N, 2, $1, $2); }
-		| OPENPAR exp CLOSEPAR { $$ = cria_node(EXP_N, 3, terminalToken($1), $2, terminalToken($3)); }
+		| OPENPAR exp CLOSEPAR { $$ = cria_node(EXP_N, terminalToken($1), $2, terminalToken($3)); }
 		;
 
-chamadadefuncao	: NAME OPENPAR otherlistaexp CLOSEPAR { $$ = cria_node(FUNCALL, 4, terminalToken($1), terminalToken($2), $3, terminalToken($4)); }
+chamadadefuncao	: NAME OPENPAR optionListaexp CLOSEPAR { $$ = cria_node(FUNCALL, 4,terminalToken($1), terminalToken($2), $3, terminalToken($4)); }
+				;
+
+listadenomes	: NAME commaNome { $$ = cria_node(LIST_N, 2, terminalToken($1), $2); }
+				;
+
+commaNome	: { $$ = NULL}
+		| commaNome COMMA NAME { $$ = cria_node(COMMA, 3, $1, terminalToken($2), terminalToken($3)); }
 		;
 
-listadenomes: NAME othername { $$ = cria_node(LIST_N, 2, terminalToken($1), $2); }
-		;
+listaexp	: exp commaExp { $$ = cria_node(LIST_N, $1, $2); }
+			;
 
-listaexp: exp otherexp2 { $$ = cria_node(LISTEXP_N, 2, $1, $2); }
-		;
+commaExp	: { $$ = NULL; }
+			| commaExp COMMA exp { $$ = cria_node(EXP_N, 3, $1, terminalToken($2), $3); }
+			;
 
-opbin	: TIMES { $$ = terminalToken($1); }
+opbin	: PLUS { $$ = terminalToken($1); }
 		| MINUS { $$ = terminalToken($1); }
-		| PLUS { $$ = terminalToken($1); }
+		| TIMES { $$ = terminalToken($1); }
 		| DIV { $$ = terminalToken($1); }
 		| LT { $$ = terminalToken($1); }
 		| LTEQ { $$ = terminalToken($1); }
@@ -107,44 +146,8 @@ opbin	: TIMES { $$ = terminalToken($1); }
 		| OR { $$ = terminalToken($1); }
 		;
 
-opunaria	: MINUS { $$ = terminalToken($1); }
+opunaria: MINUS { $$ = terminalToken($1); }
 		| NOT { $$ = terminalToken($1); }
-		;
-
-othername: {$$ = NULL}
-		| COMMA listadenomes { $$ = cria_node(COMMA, 2, terminalToken($1), $2); }
-		;
-
-otherexp: {$$ = NULL}
-		| COMMA exp { $$ = cria_node(COMMA, 2, terminalToken($1), $2); }
-		;
-
-otherexp2: {$$ = NULL}
-		| COMMA listaexp { $$ = cria_node(COMMA, 2, terminalToken($1), $2); }
-		;
-
-othersemicol	: {$$ = NULL}
-		| SEMICOL {$$ = terminalToken($1);}
-		;
-
-elseif	: {$$ = NULL}
-		| ELSEIF exp THEN bloco elseif { $$ = cria_node(COMANDO_N, 5, terminalToken($1), $2, terminalToken($3), $4, $5); }
-		;
-
-otherelse	: {$$ = NULL}
-		| ELSE bloco { $$ = cria_node(ELSE, 2, terminalToken($1), $2); }
-		;
-
-otherlista	: {$$ = NULL}
-		| listadenomes { $$ = cria_node(LIST_N, 0,$1); }
-		;
-
-otherlista2	: {$$ = NULL}
-		| ASSIGN listaexp { $$ = cria_node(ASSIGN, 2, terminalToken($1), $2); }
-		;
-
-otherlistaexp	: {$$ = NULL}
-		| listaexp { $$ = cria_node(LISTEXP_N, 0, $1); }
 		;
 
 %%
