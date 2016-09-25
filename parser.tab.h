@@ -82,8 +82,10 @@ extern int yydebug;
     LIST_N = 292,
     LISTEXP_N = 293,
     NOT = 294,
-    NAME = 295,
-    NUMBER = 296
+    COMMENT = 295,
+    C_COMMENT = 296,
+    NAME = 297,
+    NUMBER = 298
   };
 #endif
 
@@ -98,7 +100,7 @@ union YYSTYPE
 	int integer; 
 	char id[20];
 
-#line 102 "parser.tab.h" /* yacc.c:1909  */
+#line 104 "parser.tab.h" /* yacc.c:1909  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
