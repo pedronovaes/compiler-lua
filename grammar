@@ -1,7 +1,8 @@
 programa	: bloco
 		;
 
-bloco		: comando bloco comandoret
+bloco		: comando bloco
+		| comandoret
 		|
 		;
 
@@ -11,82 +12,76 @@ comando		: SEMICOL
 		| DO bloco END
 		| WHILE exp DO bloco END
 		| FOR NAME ASSIGN exp COMMA exp otherexp DO bloco END
-		| IF exp THEN bloco elseif otherelse END
-		| FUNCTION NAME OPENPAR otherlista CLOSEPAR bloco END
-		| LOCAL listadenomes otherlista2
-		;
-
-comandoret	: RETURN otherlistaexp othersemicol
-		;
-
-exp		: NUMBER
-		| NAME
-		| NIL
-		| chamadadefuncao
-		| exp opbin exp
-		| opunaria exp
-		| OPENPAR exp CLOSEPAR
-		;
-
-chamadadefuncao	: NAME OPENPAR otherlistaexp CLOSEPAR
-		;
-
-listadenomes	: NAME othername
-		;
-
-listaexp	: exp otherexp2
-		;
-
-opbin		: TIMES
-		| MINUS
-		| PLUS
-		| DIV
-		| LT
-		| LTEQ
-		| GT
-		| GTEQ
-		| EQ
-		| NEQ
-		| AND
-		| OR
-		;
-
-opunaria	: MINUS
-		| NOT
-		;
-
-othername	: COMMA listadenomes
-		|
+		| IF exp THEN bloco elseif else END
+		| FUNCTION NAME OPENPAR optionListanome CLOSEPAR bloco END
+		| LOCAL listadenomes assignlistaexp
 		;
 
 otherexp	: COMMA exp
 		|
 		;
 
-otherexp2	: COMMA listaexp
+elseif		: elseif ELSEIF exp THEN bloco
 		|
 		;
 
-othersemicol	: SEMICOL
+else		: ELSE bloco
 		|
 		;
 
-elseif		: ELSEIF exp THEN bloco elseif
+optionListanome	: listadenomes
 		|
 		;
 
-otherelse	: ELSE bloco
+assignlistaexp	: ASSIGN listaexp
 		|
 		;
 
-otherlista	: listadenomes
+comandoret	: RETURN optionListaexp optionSemicol
+		;
+
+optionListaexp	: listaexp
 		|
 		;
 
-otherlista2	: ASSIGN listaexp
+optionSemicol	: SEMICOL
 		|
 		;
 
-otherlistaexp	: listaexp 
+exp		: NUMBER
+		| NAME
+		| NIL
+		| chamadadefuncao
+		| exp PLUS exp
+		| exp MINUS exp
+		| exp TIMES exp
+		| exp DIV exp
+		| exp OR exp
+		| exp AND exp
+		| exp LT exp
+		| exp LTEQ exp
+		| exp GT exp
+		| exp GTEQ exp
+		| exp EQ exp
+		| exp NEQ exp
+		| NOT exp
+		| MINUS exp
+		| OPENPAR exp CLOSEPAR
+		;
+
+chamadadefuncao	: NAME OPENPAR optionListaexp CLOSEPAR
+		;
+
+listadenomes	: NAME commaNome
+		;
+
+commaNome	: commaNome COMMA NAME
+		|
+		;
+
+listaexp	: exp commaExp
+		;
+
+commaExp	: commaExp COMMA exp
 		|
 		;
