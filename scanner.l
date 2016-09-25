@@ -217,7 +217,7 @@ int yywrap(void) {
 //int main(){
 	//yyin = fopen(argv[1], "r");
 	//yyout = fopen(argv[2], "w");
-//	yylex();
+	//yylex();
 	//fclose(yyin);
 	//fprintf(yyout, "\n");
 	//fclose(yyout);

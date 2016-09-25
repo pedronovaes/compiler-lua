@@ -1,4 +1,4 @@
-all: 	parser.h y.tab.h scanner.l parser.y y.tab.c lex.yy.c
-	bison -d parser.y
-	flex -l scanner.l
+all: 	parser.h scanner.l parser.y
+	yacc -d parser.y
+	lex -l scanner.l
 	gcc lex.yy.c y.tab.c -o compiler

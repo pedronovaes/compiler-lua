@@ -82,8 +82,10 @@ extern int yydebug;
     LIST_N = 292,
     LISTEXP_N = 293,
     NOT = 294,
-    NAME = 295,
-    NUMBER = 296
+    COMMENT = 295,
+    C_COMMENT = 296,
+    NAME = 297,
+    NUMBER = 298
   };
 #endif
 /* Tokens.  */
@@ -124,21 +126,23 @@ extern int yydebug;
 #define LIST_N 292
 #define LISTEXP_N 293
 #define NOT 294
-#define NAME 295
-#define NUMBER 296
+#define COMMENT 295
+#define C_COMMENT 296
+#define NAME 297
+#define NUMBER 298
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 18 "parser.y" /* yacc.c:1909  */
+#line 22 "parser.y" /* yacc.c:1909  */
 
 	tipoTree *treePointer;
 	int integer; 
 	char id[20];
 
-#line 142 "y.tab.h" /* yacc.c:1909  */
+#line 146 "y.tab.h" /* yacc.c:1909  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
