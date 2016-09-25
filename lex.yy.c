@@ -1060,7 +1060,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 115 "scanner.l"
+#line 114 "scanner.l"
 {
 						//print_token("T_COMMA");
 						return COMMA;
@@ -1068,7 +1068,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 119 "scanner.l"
+#line 118 "scanner.l"
 {
 						//print_token("T_SEMICOL");
 						return SEMICOL;
@@ -1076,7 +1076,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 123 "scanner.l"
+#line 122 "scanner.l"
 {
 						//print_token("T_ASSIGN");
 						return ASSIGN;
@@ -1084,7 +1084,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 127 "scanner.l"
+#line 126 "scanner.l"
 {
 						//print_token("T_EQ");
 						return EQ;
@@ -1092,7 +1092,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 131 "scanner.l"
+#line 130 "scanner.l"
 {
 						//print_token("T_NEQ");
 						return NEQ;
@@ -1100,7 +1100,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 135 "scanner.l"
+#line 134 "scanner.l"
 {
 						//print_token("T_LTEQ");
 						return LTEQ;
@@ -1108,7 +1108,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 139 "scanner.l"
+#line 138 "scanner.l"
 {
 						//print_token("T_GTEQ");
 						return GTEQ;
@@ -1116,7 +1116,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 143 "scanner.l"
+#line 142 "scanner.l"
 {
 						//print_token("T_LT");
 						return LT;
@@ -1124,7 +1124,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 147 "scanner.l"
+#line 146 "scanner.l"
 {
 						//print_token("T_GT");
 						return GT;
@@ -1132,7 +1132,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 151 "scanner.l"
+#line 150 "scanner.l"
 {
 						//print_token("T_CLOSEPAR");
 						return CLOSEPAR;
@@ -1140,7 +1140,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 155 "scanner.l"
+#line 154 "scanner.l"
 {
 						//print_token("T_OPENPAR");
 						return OPENPAR;
@@ -1149,17 +1149,17 @@ YY_RULE_SETUP
 case 36:
 /* rule 36 can match eol */
 YY_RULE_SETUP
-#line 160 "scanner.l"
+#line 159 "scanner.l"
 yylineno++;
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 161 "scanner.l"
+#line 160 "scanner.l"
 ;
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 162 "scanner.l"
+#line 161 "scanner.l"
 {
 						//print_error();
 						yyerror("CARACTER NAO ESPERADO");
@@ -1168,7 +1168,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 167 "scanner.l"
+#line 166 "scanner.l"
 ECHO;
 	YY_BREAK
 #line 1175 "lex.yy.c"
@@ -2155,7 +2155,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 167 "scanner.l"
+#line 166 "scanner.l"
 
 
 

@@ -16,8 +16,8 @@ id					[a-zA-Z_][a-zA-Z_0-9]*
 
 %%
 
-"--"					return COMMENT;
-"--["					return C_COMMENT;
+"--"					simple_comment();
+"--["					complex_comment();
 
 "and"					{
 						//print_token("T_AND");
@@ -111,7 +111,6 @@ id					[a-zA-Z_][a-zA-Z_0-9]*
 						//print_token("T_DIV");
 						return DIV;
 					}
-
 ","					{
 						//print_token("T_COMMA");
 						return COMMA;

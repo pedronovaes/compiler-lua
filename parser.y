@@ -58,7 +58,7 @@ tipoTree *treeRoot = NULL;
 
 %%
 
-programa	: bloco { treeRoot = $1; }
+programa: bloco { treeRoot = $1; }
 		;
 
 bloco	: {$$ = NULL;}
@@ -66,7 +66,7 @@ bloco	: {$$ = NULL;}
 		| comandoret { $$ = cria_node(BLOCO, 1, $1); }
 		;
 
-comando		: SEMICOL { $$ = cria_node(COMANDO_N, 1, ";");}
+comando	: SEMICOL { $$ = cria_node(COMANDO_N, 1, ";");}
 		| listadenomes ASSIGN listaexp {$$ = cria_node(ASSIGN, 2, $1, $3); }
 		| chamadadefuncao {$$ = cria_node(COMANDO_N, $1); }
 		| DO bloco END {$$ = cria_node(COMANDO_N, 3, terminalToken("do"), terminalToken("end")); }
@@ -166,7 +166,7 @@ tipoTree * cria_node(int token_n, int n_filhos, ...){
 	va_start(params, n_filhos);
 	while(i < n_filhos)
 	{
-		aux->filhos[i] = va_arg(params, tipoTree *);
+		aux->filhos[i] = va_arg(params, tipoTree*);
 		i++;
 	}
 	
@@ -178,8 +178,8 @@ tipoTree * terminalNumber(int token_n){
 
 	tipoTree *aux = malloc(sizeof(struct treeNode));
 	aux->num_filhos = 0;
-	aux->tokenNumber = token_n;
-//	aux->number = token;
+//	aux->tokenNumber = token_n;
+	aux->number = toke_n;
 	aux->id = NULL;
 	return aux;
 }
