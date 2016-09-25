@@ -50,7 +50,7 @@ tipoTree *treeRoot = NULL;
 //%nonassoc IFX
 //%nonassoc ELSE
 
-%left AND 
+%left AND
 %left OR
 %left LT GT LTEQ GTEQ EQ NEQ
 %left OPENPAR CLOSEPAR
@@ -63,7 +63,7 @@ tipoTree *treeRoot = NULL;
 
 %%
 
-programa: bloco { treeRoot = $1; printTree(treeRoot); }
+programa: bloco { treeRoot = $1; }
 		;
 
 bloco	: {$$ = NULL;}
@@ -113,16 +113,6 @@ optionSemicol	: { $$ = NULL; }
 		| SEMICOL { $$ = terminalToken(";"); }
 		;
 
-/*exp	: NUMBER { $$ = terminalNumber($1); }
-		| NAME { $$ = terminalToken($1); }
-		| NIL { $$ = terminalToken("nil"); }
-		| chamadadefuncao { $$ = cria_node(FUNCALL, 1, $1); }
-		| exp opbin exp { $$ = cria_node(LISTEXP_N, 3, $1, $2 ,$3); }
-		| opunaria exp { $$ = cria_node(EXP_N, 2, $1, $2); }
-		| OPENPAR exp CLOSEPAR { $$ = cria_node(EXP_N, 3,terminalToken("("), $2, terminalToken(")")); }
-		;
-*/
-
 chamadadefuncao	: NAME OPENPAR optionListaexp CLOSEPAR { $$ = cria_node(FUNCALL, 4,terminalToken($1), terminalToken("("), $3, terminalToken(")")); }
 				;
 
@@ -161,25 +151,6 @@ exp		: NUMBER { $$ = terminalNumber($1); }
 		| OPENPAR exp CLOSEPAR { $$ = cria_node(EXP_N, 3,terminalToken("("), $2, terminalToken(")")); }
 		;
 
-/*opbin	: PLUS { $$ = terminalToken("+"); }
-		| MINUS { $$ = terminalToken("-"); }
-		| TIMES { $$ = terminalToken("*"); }
-		| DIV { $$ = terminalToken("/"); }
-		| LT { $$ = terminalToken("<"); }
-		| LTEQ { $$ = terminalToken("<="); }
-		| GT { $$ = terminalToken(">"); }
-		| GTEQ { $$ = terminalToken(">="); }
-		| EQ { $$ = terminalToken("=="); }
-		| NEQ { $$ = terminalToken("~="); }
-		| AND { $$ = terminalToken("and"); }
-		| OR { $$ = terminalToken("or"); }
-		;
-
-opunaria: MINUS { $$ = terminalToken("-"); }
-		| NOT { $$ = terminalToken("not"); }
-		;
-*/
-
 %%
 
 tipoTree * cria_node(int token_n, int n_filhos, ...){
@@ -190,6 +161,7 @@ tipoTree * cria_node(int token_n, int n_filhos, ...){
 	aux->tokenNumber = token_n;
 	aux->num_filhos = n_filhos;
 	aux->filhos = malloc(n_filhos * sizeof(struct treeNode));
+//	for(i = 0; i < n_filhos; i++) aux->filhos[i] = NULL;
 
 	va_start(params, n_filhos);
 	while(i < n_filhos)
@@ -216,7 +188,8 @@ tipoTree * terminalToken(char id[20]){
 	
 	tipoTree *aux = malloc(sizeof(struct treeNode));
 	aux->num_filhos = 0;
-	//aux->tokenNumber = token_n;
+//	aux->tokenNumber = token_n;
+	aux->id = malloc(sizeof(char)*strlen(id));
 	strcpy(aux->id, id);
 	return aux;
 }
@@ -232,7 +205,7 @@ int printTree(tipoTree *p){
 	{
 		if (p->tokenNumber == NUMBER)
 			printf("%d %d", p->tokenNumber, p->number);
-		else if(p->tokenNumber == NAME)
+		else if(p->tokenNumber != NAME)
 			printf("%d %s", p->tokenNumber, p->id);
 	}
 	else
@@ -248,7 +221,8 @@ int main(int argc, char** argv){
 
 	yyin = fopen(argv[1], "r");
 
-	if(!yyin) printf("Deu ruim!\n");
-
+	if(!yyin) printf("Deu ruim no arquivo!\n");
 	yyparse();
+	printTree(treeRoot);
+	printf("\n");
 }

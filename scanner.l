@@ -213,13 +213,3 @@ complex_comment(){
 int yywrap(void) {
     return 1;
 }
-
-//int main(){
-	//yyin = fopen(argv[1], "r");
-	//yyout = fopen(argv[2], "w");
-	//yylex();
-	//fclose(yyin);
-	//fprintf(yyout, "\n");
-	//fclose(yyout);
-	//return 0;
-//}
