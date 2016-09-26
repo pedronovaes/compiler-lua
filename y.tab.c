@@ -73,17 +73,20 @@
 #define YYDEBUG 1
 
 extern FILE *yyin;
+extern FILE *yyout;
 
 int yylex(void);
-tipoTree * cria_node(int token_n, int n_filhos, ...);
+tipoTree * cria_node(char nonT[20], int n_filhos, ...);
 tipoTree * terminalNumber(int token_n);
-tipoTree * terminalToken(char *id);
+tipoTree * terminalToken(char id[20], int token_n);
+char * consultaToken(int token_n);
 void yyerror(char *string);
 
 tipoTree *treeRoot = NULL;
+localContext globalContext;
 
 
-#line 87 "y.tab.c" /* yacc.c:339  */
+#line 90 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -209,13 +212,13 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 22 "parser.y" /* yacc.c:355  */
+#line 25 "parser.y" /* yacc.c:355  */
 
 	tipoTree *treePointer;
 	int integer; 
 	char id[20];
 
-#line 219 "y.tab.c" /* yacc.c:355  */
+#line 222 "y.tab.c" /* yacc.c:355  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
@@ -230,7 +233,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 234 "y.tab.c" /* yacc.c:358  */
+#line 237 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -531,12 +534,12 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    66,    66,    69,    70,    71,    74,    75,    76,    77,
-      78,    79,    80,    81,    82,    85,    86,    89,    90,    93,
-      94,    97,    98,   101,   102,   105,   108,   109,   112,   113,
-     116,   119,   122,   123,   126,   129,   130,   133,   134,   135,
-     136,   137,   138,   139,   140,   141,   142,   143,   144,   145,
-     146,   147,   148,   149,   150,   151
+       0,    66,    66,    75,    76,    77,    80,    81,    82,    83,
+      84,    85,    86,    87,    88,    91,    92,    95,    96,    99,
+     100,   103,   104,   107,   108,   111,   114,   115,   118,   119,
+     122,   125,   128,   129,   132,   135,   136,   139,   140,   141,
+     142,   143,   144,   145,   146,   147,   148,   149,   150,   151,
+     152,   153,   154,   155,   156,   157
 };
 #endif
 
@@ -1409,330 +1412,337 @@ yyreduce:
     {
         case 2:
 #line 66 "parser.y" /* yacc.c:1646  */
-    { treeRoot = (yyvsp[0].treePointer); }
-#line 1414 "y.tab.c" /* yacc.c:1646  */
+    {
+				if((yyvsp[0].treePointer) != NULL){
+					(yyval.treePointer) = cria_node("programa", 1, (yyvsp[0].treePointer));
+					treeRoot = (yyval.treePointer);
+					printTree(treeRoot);
+					fprintf(yyout,"\n");
+				}
+	 	}
+#line 1424 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 69 "parser.y" /* yacc.c:1646  */
+#line 75 "parser.y" /* yacc.c:1646  */
     {(yyval.treePointer) = NULL;}
-#line 1420 "y.tab.c" /* yacc.c:1646  */
+#line 1430 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 70 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(BLOCO, 2, (yyvsp[-1].treePointer), (yyvsp[0].treePointer)); }
-#line 1426 "y.tab.c" /* yacc.c:1646  */
+#line 76 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("bloco", 2, (yyvsp[-1].treePointer), (yyvsp[0].treePointer)); }
+#line 1436 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 71 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(BLOCO, 1, (yyvsp[0].treePointer)); }
-#line 1432 "y.tab.c" /* yacc.c:1646  */
+#line 77 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("bloco", 1, (yyvsp[0].treePointer)); }
+#line 1442 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 74 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(COMANDO_N, 1, ";");}
-#line 1438 "y.tab.c" /* yacc.c:1646  */
+#line 80 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = terminalToken(";", SEMICOL); }
+#line 1448 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 75 "parser.y" /* yacc.c:1646  */
-    {(yyval.treePointer) = cria_node(ASSIGN, 2, (yyvsp[-2].treePointer), (yyvsp[0].treePointer)); }
-#line 1444 "y.tab.c" /* yacc.c:1646  */
+#line 81 "parser.y" /* yacc.c:1646  */
+    {(yyval.treePointer) = cria_node("listadenomes", 3, (yyvsp[-2].treePointer), terminalToken("=", ASSIGN), (yyvsp[0].treePointer)); }
+#line 1454 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 76 "parser.y" /* yacc.c:1646  */
-    {(yyval.treePointer) = cria_node(COMANDO_N, 1, (yyvsp[0].treePointer)); }
-#line 1450 "y.tab.c" /* yacc.c:1646  */
+#line 82 "parser.y" /* yacc.c:1646  */
+    {(yyval.treePointer) = cria_node("chamadadefuncao", 1, (yyvsp[0].treePointer)); }
+#line 1460 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 77 "parser.y" /* yacc.c:1646  */
-    {(yyval.treePointer) = cria_node(COMANDO_N, 3, terminalToken("do"), terminalToken("end")); }
-#line 1456 "y.tab.c" /* yacc.c:1646  */
+#line 83 "parser.y" /* yacc.c:1646  */
+    {(yyval.treePointer) = cria_node("comando", 3, terminalToken("do", DO), terminalToken("end", END)); }
+#line 1466 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 78 "parser.y" /* yacc.c:1646  */
-    {(yyval.treePointer) = cria_node(COMANDO_N, 5, terminalToken("while"), (yyvsp[-3].treePointer), terminalToken("do"), (yyvsp[-1].treePointer), terminalToken("end")); }
-#line 1462 "y.tab.c" /* yacc.c:1646  */
+#line 84 "parser.y" /* yacc.c:1646  */
+    {(yyval.treePointer) = cria_node("comando", 5, terminalToken("while", WHILE), (yyvsp[-3].treePointer), terminalToken("do", DO), (yyvsp[-1].treePointer), terminalToken("end", END)); }
+#line 1472 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 79 "parser.y" /* yacc.c:1646  */
-    {(yyval.treePointer) = cria_node(COMANDO_N, 10, terminalToken("for"), terminalToken((yyvsp[-8].id)), terminalToken("="), (yyvsp[-6].treePointer), terminalToken(","), (yyvsp[-4].treePointer), (yyvsp[-3].treePointer), terminalToken("do"), (yyvsp[-1].treePointer), terminalToken("end") ); }
-#line 1468 "y.tab.c" /* yacc.c:1646  */
+#line 85 "parser.y" /* yacc.c:1646  */
+    {(yyval.treePointer) = cria_node("comando", 10, terminalToken("for", FOR), terminalToken((yyvsp[-8].id), NAME), terminalToken("=", ASSIGN), (yyvsp[-6].treePointer), terminalToken(",", COMMA), (yyvsp[-4].treePointer), (yyvsp[-3].treePointer), terminalToken("do", DO), (yyvsp[-1].treePointer), terminalToken("end", END) ); }
+#line 1478 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 80 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(COMANDO_N, 7, terminalToken("if"), (yyvsp[-5].treePointer), terminalToken("then"), (yyvsp[-3].treePointer), (yyvsp[-2].treePointer), (yyvsp[-1].treePointer), terminalToken("end")); }
-#line 1474 "y.tab.c" /* yacc.c:1646  */
+#line 86 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("comando", 7, terminalToken("if", IF), (yyvsp[-5].treePointer), terminalToken("then", THEN), (yyvsp[-3].treePointer), (yyvsp[-2].treePointer), (yyvsp[-1].treePointer), terminalToken("end", END)); }
+#line 1484 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 81 "parser.y" /* yacc.c:1646  */
-    {(yyval.treePointer) = cria_node(FUNCALL, 7, terminalToken("function"), terminalToken((yyvsp[-5].id)), terminalToken("("), (yyvsp[-3].treePointer), terminalToken(")"), (yyvsp[-1].treePointer), terminalToken("end")); }
-#line 1480 "y.tab.c" /* yacc.c:1646  */
+#line 87 "parser.y" /* yacc.c:1646  */
+    {(yyval.treePointer) = cria_node("comando", 7, terminalToken("function", FUNCTION), terminalToken((yyvsp[-5].id), NAME), terminalToken("(", OPENPAR), (yyvsp[-3].treePointer), terminalToken(")", CLOSEPAR), (yyvsp[-1].treePointer), terminalToken("end", END)); }
+#line 1490 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 82 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(COMANDO_N, 3, terminalToken("local"), (yyvsp[-1].treePointer), (yyvsp[0].treePointer)); }
-#line 1486 "y.tab.c" /* yacc.c:1646  */
+#line 88 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("comando", 3, terminalToken("local", LOCAL), (yyvsp[-1].treePointer), (yyvsp[0].treePointer)); }
+#line 1496 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 85 "parser.y" /* yacc.c:1646  */
+#line 91 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = NULL; }
-#line 1492 "y.tab.c" /* yacc.c:1646  */
+#line 1502 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 86 "parser.y" /* yacc.c:1646  */
-    { cria_node(LISTEXP_N, 2, terminalToken(","), (yyvsp[0].treePointer)); }
-#line 1498 "y.tab.c" /* yacc.c:1646  */
+#line 92 "parser.y" /* yacc.c:1646  */
+    { cria_node("listaexp", 2, terminalToken(",", COMMA), (yyvsp[0].treePointer)); }
+#line 1508 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 89 "parser.y" /* yacc.c:1646  */
+#line 95 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = NULL; }
-#line 1504 "y.tab.c" /* yacc.c:1646  */
+#line 1514 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 90 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(COMANDO_N, 5, (yyvsp[-4].treePointer), terminalToken("elseif"), (yyvsp[-2].treePointer), terminalToken("then"), (yyvsp[0].treePointer)); }
-#line 1510 "y.tab.c" /* yacc.c:1646  */
+#line 96 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("elseif", 5, (yyvsp[-4].treePointer), terminalToken("elseif", ELSEIF), (yyvsp[-2].treePointer), terminalToken("then", THEN), (yyvsp[0].treePointer)); }
+#line 1520 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 93 "parser.y" /* yacc.c:1646  */
+#line 99 "parser.y" /* yacc.c:1646  */
     {(yyval.treePointer) = NULL; }
-#line 1516 "y.tab.c" /* yacc.c:1646  */
+#line 1526 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 94 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(COMANDO_N, 2, terminalToken("else"), (yyvsp[0].treePointer)); }
-#line 1522 "y.tab.c" /* yacc.c:1646  */
+#line 100 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("comando", 2, terminalToken("else", ELSE), (yyvsp[0].treePointer)); }
+#line 1532 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 97 "parser.y" /* yacc.c:1646  */
+#line 103 "parser.y" /* yacc.c:1646  */
     {(yyval.treePointer) = NULL;}
-#line 1528 "y.tab.c" /* yacc.c:1646  */
+#line 1538 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 98 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(LIST_N, 1, (yyvsp[0].treePointer)); }
-#line 1534 "y.tab.c" /* yacc.c:1646  */
+#line 104 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("listadenomes", 1, (yyvsp[0].treePointer)); }
+#line 1544 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 101 "parser.y" /* yacc.c:1646  */
+#line 107 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = NULL;}
-#line 1540 "y.tab.c" /* yacc.c:1646  */
+#line 1550 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 102 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(ASSIGN, 2, terminalToken("="), (yyvsp[0].treePointer)); }
-#line 1546 "y.tab.c" /* yacc.c:1646  */
+#line 108 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("listaexp", 2, terminalToken("=", ASSIGN), (yyvsp[0].treePointer)); }
+#line 1556 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 105 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(RETURN_N, 3, terminalToken("return"), (yyvsp[-1].treePointer), (yyvsp[0].treePointer)); }
-#line 1552 "y.tab.c" /* yacc.c:1646  */
+#line 111 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("comandoret", 3, terminalToken("return", RETURN), (yyvsp[-1].treePointer), (yyvsp[0].treePointer)); }
+#line 1562 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 108 "parser.y" /* yacc.c:1646  */
+#line 114 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = NULL; }
-#line 1558 "y.tab.c" /* yacc.c:1646  */
+#line 1568 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 109 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(LIST_N, 1, (yyvsp[0].treePointer)); }
-#line 1564 "y.tab.c" /* yacc.c:1646  */
+#line 115 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("listaexp", 1, (yyvsp[0].treePointer)); }
+#line 1574 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 112 "parser.y" /* yacc.c:1646  */
+#line 118 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = NULL; }
-#line 1570 "y.tab.c" /* yacc.c:1646  */
+#line 1580 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 113 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = terminalToken(";"); }
-#line 1576 "y.tab.c" /* yacc.c:1646  */
+#line 119 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = terminalToken(";", SEMICOL); }
+#line 1586 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 116 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(FUNCALL, 4,terminalToken((yyvsp[-3].id)), terminalToken("("), (yyvsp[-1].treePointer), terminalToken(")")); }
-#line 1582 "y.tab.c" /* yacc.c:1646  */
+#line 122 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("chamadadefuncao", 4,terminalToken((yyvsp[-3].id), NAME), terminalToken("(", OPENPAR), (yyvsp[-1].treePointer), terminalToken(")", CLOSEPAR)); }
+#line 1592 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 119 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(LIST_N, 2, terminalToken((yyvsp[-1].id)), (yyvsp[0].treePointer)); }
-#line 1588 "y.tab.c" /* yacc.c:1646  */
+#line 125 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("listadenomes", 2, terminalToken((yyvsp[-1].id), NAME), (yyvsp[0].treePointer)); }
+#line 1598 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 122 "parser.y" /* yacc.c:1646  */
+#line 128 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = NULL;}
-#line 1594 "y.tab.c" /* yacc.c:1646  */
+#line 1604 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 123 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(COMMA, 3, (yyvsp[-2].treePointer), terminalToken(","), terminalToken((yyvsp[0].id))); }
-#line 1600 "y.tab.c" /* yacc.c:1646  */
+#line 129 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("listadenomes", 3, (yyvsp[-2].treePointer), terminalToken(",", COMMA), terminalToken((yyvsp[0].id), NAME)); }
+#line 1610 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 126 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(LIST_N, 2,(yyvsp[-1].treePointer), (yyvsp[0].treePointer)); }
-#line 1606 "y.tab.c" /* yacc.c:1646  */
+#line 132 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("listaexp", 2,(yyvsp[-1].treePointer), (yyvsp[0].treePointer)); }
+#line 1616 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 129 "parser.y" /* yacc.c:1646  */
+#line 135 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = NULL; }
-#line 1612 "y.tab.c" /* yacc.c:1646  */
+#line 1622 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 130 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(EXP_N, 3, (yyvsp[-2].treePointer), terminalToken(","), (yyvsp[0].treePointer)); }
-#line 1618 "y.tab.c" /* yacc.c:1646  */
+#line 136 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("listaexp", 3, (yyvsp[-2].treePointer), terminalToken(",", COMMA), (yyvsp[0].treePointer)); }
+#line 1628 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 133 "parser.y" /* yacc.c:1646  */
+#line 139 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = terminalNumber((yyvsp[0].integer)); }
-#line 1624 "y.tab.c" /* yacc.c:1646  */
+#line 1634 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 134 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = terminalToken((yyvsp[0].id)); }
-#line 1630 "y.tab.c" /* yacc.c:1646  */
+#line 140 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = terminalToken((yyvsp[0].id), NAME); }
+#line 1640 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 135 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = terminalToken("nil"); }
-#line 1636 "y.tab.c" /* yacc.c:1646  */
+#line 141 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = terminalToken("nil", NIL); }
+#line 1646 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 136 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(FUNCALL, 1, (yyvsp[0].treePointer)); }
-#line 1642 "y.tab.c" /* yacc.c:1646  */
+#line 142 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("chamadadefuncao", 1, (yyvsp[0].treePointer)); }
+#line 1652 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 137 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(EXP_N, 3, (yyvsp[-2].treePointer), terminalToken("+"), (yyvsp[0].treePointer)); }
-#line 1648 "y.tab.c" /* yacc.c:1646  */
+#line 143 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken("+", PLUS), (yyvsp[0].treePointer)); }
+#line 1658 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 138 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(EXP_N, 3, (yyvsp[-2].treePointer), terminalToken("-"), (yyvsp[0].treePointer)); }
-#line 1654 "y.tab.c" /* yacc.c:1646  */
+#line 144 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken("-", MINUS), (yyvsp[0].treePointer)); }
+#line 1664 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 139 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(EXP_N, 3, (yyvsp[-2].treePointer), terminalToken("*"), (yyvsp[0].treePointer)); }
-#line 1660 "y.tab.c" /* yacc.c:1646  */
+#line 145 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken("*", TIMES), (yyvsp[0].treePointer)); }
+#line 1670 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 140 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(EXP_N, 3, (yyvsp[-2].treePointer), terminalToken("/"), (yyvsp[0].treePointer)); }
-#line 1666 "y.tab.c" /* yacc.c:1646  */
+#line 146 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken("/", DIV), (yyvsp[0].treePointer)); }
+#line 1676 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 141 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(EXP_N, 3, (yyvsp[-2].treePointer), terminalToken("or"), (yyvsp[0].treePointer)); }
-#line 1672 "y.tab.c" /* yacc.c:1646  */
+#line 147 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken("or", OR), (yyvsp[0].treePointer)); }
+#line 1682 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 142 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(EXP_N, 3, (yyvsp[-2].treePointer), terminalToken("and"), (yyvsp[0].treePointer)); }
-#line 1678 "y.tab.c" /* yacc.c:1646  */
+#line 148 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken("and", AND), (yyvsp[0].treePointer)); }
+#line 1688 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 143 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(EXP_N, 3, (yyvsp[-2].treePointer), terminalToken("<"), (yyvsp[0].treePointer)); }
-#line 1684 "y.tab.c" /* yacc.c:1646  */
+#line 149 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken("<", LT), (yyvsp[0].treePointer)); }
+#line 1694 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 144 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(EXP_N, 3, (yyvsp[-2].treePointer), terminalToken("<="), (yyvsp[0].treePointer)); }
-#line 1690 "y.tab.c" /* yacc.c:1646  */
+#line 150 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken("<=", LTEQ), (yyvsp[0].treePointer)); }
+#line 1700 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 145 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(EXP_N, 3, (yyvsp[-2].treePointer), terminalToken(">"), (yyvsp[0].treePointer)); }
-#line 1696 "y.tab.c" /* yacc.c:1646  */
+#line 151 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken(">", GT), (yyvsp[0].treePointer)); }
+#line 1706 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 146 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(EXP_N, 3, (yyvsp[-2].treePointer), terminalToken(">="), (yyvsp[0].treePointer)); }
-#line 1702 "y.tab.c" /* yacc.c:1646  */
+#line 152 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken(">=", GTEQ), (yyvsp[0].treePointer)); }
+#line 1712 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 147 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(EXP_N, 3, (yyvsp[-2].treePointer), terminalToken("=="), (yyvsp[0].treePointer)); }
-#line 1708 "y.tab.c" /* yacc.c:1646  */
+#line 153 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken("==", EQ), (yyvsp[0].treePointer)); }
+#line 1718 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 148 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(EXP_N, 3, (yyvsp[-2].treePointer), terminalToken("~="), (yyvsp[0].treePointer)); }
-#line 1714 "y.tab.c" /* yacc.c:1646  */
+#line 154 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken("~=", NEQ), (yyvsp[0].treePointer)); }
+#line 1724 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 149 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(EXP_N, 2, terminalToken("not"), (yyvsp[0].treePointer)); }
-#line 1720 "y.tab.c" /* yacc.c:1646  */
+#line 155 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("opunaria", 2, terminalToken("not", NOT), (yyvsp[0].treePointer)); }
+#line 1730 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 150 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(EXP_N, 2, terminalToken("-"), (yyvsp[0].treePointer)); }
-#line 1726 "y.tab.c" /* yacc.c:1646  */
+#line 156 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("opunaria", 2, terminalToken("-", MINUS), (yyvsp[0].treePointer)); }
+#line 1736 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 151 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node(EXP_N, 3,terminalToken("("), (yyvsp[-1].treePointer), terminalToken(")")); }
-#line 1732 "y.tab.c" /* yacc.c:1646  */
+#line 157 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("exp", 3,terminalToken("(", OPENPAR), (yyvsp[-1].treePointer), terminalToken(")", CLOSEPAR)); }
+#line 1742 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1736 "y.tab.c" /* yacc.c:1646  */
+#line 1746 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1960,18 +1970,18 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 154 "parser.y" /* yacc.c:1906  */
+#line 160 "parser.y" /* yacc.c:1906  */
 
 
-tipoTree * cria_node(int token_n, int n_filhos, ...){
+tipoTree * cria_node(char nonT[20], int n_filhos, ...){
 
 	va_list params;
 	int i = 0;
 	tipoTree *aux = malloc(sizeof(struct treeNode));
-	aux->tokenNumber = token_n;
+	aux->nonTerminal = malloc(sizeof(char)*strlen(nonT));
+	strcpy(aux->nonTerminal, nonT);
 	aux->num_filhos = n_filhos;
 	aux->filhos = malloc(n_filhos * sizeof(struct treeNode));
-//	for(i = 0; i < n_filhos; i++) aux->filhos[i] = NULL;
 
 	va_start(params, n_filhos);
 	while(i < n_filhos)
@@ -1994,15 +2004,119 @@ tipoTree * terminalNumber(int token_n){
 	return aux;
 }
 
-tipoTree * terminalToken(char id[20]){
+tipoTree * terminalToken(char id[20], int token_n){
 	
 	tipoTree *aux = malloc(sizeof(struct treeNode));
 	aux->num_filhos = 0;
-	//aux->tokenNumber = token_n;
+	aux->tokenNumber = token_n;
 	aux->id = malloc(sizeof(char)*strlen(id));
 	strcpy(aux->id, id);
 	return aux;
 }
+
+char * consultaToken(int token_n){
+
+	switch( token_n ){
+		case AND :
+			return "T_AND";
+			break;
+		case  NOT:
+			return "T_NOT";
+			break;
+		case OR: 
+			return "T_OR";
+			break;
+		case ELSEIF: 
+			return "T_ELSEIF";
+			break;
+		case WHILE: 
+			return "T_ WHILE";
+			break;
+		case DO: 
+			return "T_DO";
+			break;
+		case FUNCTION:
+			return "T_FUNCTION";
+			break;
+		case END:
+			return "T_END";
+			break;
+		case FOR: 
+			return "T_FOR";
+			break;
+		case ELSE: 
+			return "T_ELSE";
+			break;
+		case IF: 
+			return "T_IF";
+			break;
+		case THEN: 
+			return "T_THEN";
+			break;
+		case RETURN: 
+			return "T_RETURN";
+			break;
+		case LOCAL: 
+			return "T_LOCAL";
+			break;
+		case NIL: 
+			return "T_NIL";
+			break;
+		case NAME:
+			return "T_NAME";
+			break;
+		case NUMBER: 
+			return "T_NUMBER";
+			break;
+		case PLUS: 
+			return "T_PLUS";
+			break;
+		case MINUS: 
+			return "T_MINUS";
+			break;
+		case TIMES: 
+			return "T_TIMES";
+			break;
+		case DIV: 
+			return "T_DIV";
+			break;
+		case COMMA: 
+			return "T_COMMA";
+			break;
+		case SEMICOL: 
+			return "T_SEMICOL";
+			break;
+		case ASSIGN: 
+			return "T_ASSIGN";
+			break;
+		case EQ: 
+			return "T_EQ";
+			break;
+		case NEQ: 
+			return "T_NEQ";
+			break;
+		case LTEQ: 
+			return "T_LTEQ";
+			break;
+		case GTEQ: 
+			return "T_GTEQ";
+			break;
+		case LT: 
+			return "T_LT";
+			break;
+		case GT: 
+			return "T_GT";
+			break;
+		case CLOSEPAR: 
+			return "T_CLOSEPAR";
+			break;
+		case OPENPAR: 
+			return "T_OPENPAR";
+			break;
+		default :
+			return "NONE";
+	}
+};
 
 void yyerror(char *string){  fprintf(stderr, "%s\n", string); }
 
@@ -2010,13 +2124,16 @@ int printTree(tipoTree *p){
 
 	if(p == NULL)
 		return 0;
-	printf("[");
+	if(p->nonTerminal != NULL)
+		fprintf(yyout,"[%s ", p->nonTerminal);
+	else
+		fprintf(yyout, "[");
 	if(p->num_filhos == 0)
 	{
 		if (p->tokenNumber == NUMBER)
-			printf("%d %d", p->tokenNumber, p->number);
-		else if(p->tokenNumber != NAME)
-			printf("%d %s", p->tokenNumber, p->id);
+			fprintf(yyout, "%s %d", consultaToken(p->tokenNumber), p->number);
+		else
+			fprintf(yyout, "%s %s", consultaToken(p->tokenNumber), p->id);
 	}
 	else
 	{
@@ -2024,15 +2141,18 @@ int printTree(tipoTree *p){
 		for(i = 0; i < p->num_filhos; i++)
 			printTree(p->filhos[i]);
 	}
-	printf("]");
+	fprintf(yyout,"]");
 }
 
 int main(int argc, char** argv){
 
 	yyin = fopen(argv[1], "r");
+	yyout = fopen(argv[2], "w");
 
-	if(!yyin) printf("Deu ruim no arquivo!\n");
-	yyparse();
-	printTree(treeRoot);
-	printf("\n");
+	if(!yyin) printf("Arquivo nao pode ser aberto!\n");
+	else{
+		yyparse();
+	}
+	fclose(yyin);
+	fclose(yyout);
 }
