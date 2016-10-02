@@ -1,4 +1,4 @@
-%{ 
+%{
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,11 +24,11 @@ localContext globalContext;
 
 %union {
 	tipoTree *treePointer;
-	int integer; 
+	int integer;
 	char id[20];
 };
 
-%token SEMICOL ASSIGN 
+%token SEMICOL ASSIGN
 %token DO END WHILE
 %token FOR COMMA
 %token IF THEN FUNCTION ELSEIF ELSE
@@ -48,7 +48,7 @@ localContext globalContext;
 
 %token <id> NAME
 %token <integer> NUMBER
-%type <treePointer> programa bloco comando otherexp elseif else optionListanome assignlistaexp comandoret optionListaexp optionSemicol exp chamadadefuncao listadenomes commaNome listaexp commaExp
+%type <treePointer> programa bloco bloco2 bloco3 comando otherexp elseif else optionListanome assignlistaexp comandoret optionListaexp optionSemicol exp chamadadefuncao listadenomes commaNome listaexp commaExp
 
 %left AND
 %left OR
@@ -70,19 +70,32 @@ programa: bloco {
 					printTree(treeRoot);
 					fprintf(yyout,"\n");
 				}
-	 	};
+		};
 
-bloco	: {$$ = NULL;}
-		| comando bloco { $$ = cria_node("bloco", 2, $1, $2); }
+// bloco	: {$$ = NULL;}
+		// | comando bloco { $$ = cria_node("bloco", 2, $1, $2); }
+		// | comandoret { $$ = cria_node("bloco", 1, $1); }
+		// ;
+programa : bloco { $$ = cria_node("bloco", 1, $1); }
+		;
+bloco	: comando bloco2 {$$ = cria_node("bloco", 2, $1, $2); }
+		| bloco3 {$$ = cria_node("bloco", 1, $1);}
+		;
+
+bloco2 	: comando bloco2 { $$ = cria_node("comando", 2, $1, $2);}
+		| bloco3 { $$ = NULL;}
+		;
+bloco3 	: { $$ = NULL; }
 		| comandoret { $$ = cria_node("bloco", 1, $1); }
 		;
 
 comando	: SEMICOL { $$ = terminalToken(";", SEMICOL); }
-		| listadenomes ASSIGN listaexp {$$ = cria_node("listadenomes", 3, $1, terminalToken("=", ASSIGN), $3); }
-		| chamadadefuncao {$$ = cria_node("chamadadefuncao", 1, $1); }
+		| listadenomes ASSIGN listaexp {$$ = cria_node("comando", 3, $1, terminalToken("=", ASSIGN), $3); }
+		| chamadadefuncao {$$ = cria_node("comando", 1, $1); }
 		| DO bloco END {$$ = cria_node("comando", 3, terminalToken("do", DO), terminalToken("end", END)); }
 		| WHILE exp DO bloco END {$$ = cria_node("comando", 5, terminalToken("while", WHILE), $2, terminalToken("do", DO), $4, terminalToken("end", END)); }
 		| FOR NAME ASSIGN exp COMMA exp otherexp DO bloco END {$$ = cria_node("comando", 10, terminalToken("for", FOR), terminalToken($2, NAME), terminalToken("=", ASSIGN), $4, terminalToken(",", COMMA), $6, $7, terminalToken("do", DO), $9, terminalToken("end", END) ); }
+		// | IF exp THEN bloco %prec END { $$ = cria_node("comando", 5, terminalToken("if", IF), $2, terminalToken("then", THEN), $4, terminalToken("end", END)); }
 		| IF exp THEN bloco elseif else END { $$ = cria_node("comando", 7, terminalToken("if", IF), $2, terminalToken("then", THEN), $4, $5, $6, terminalToken("end", END)); }
 		| FUNCTION NAME OPENPAR optionListanome CLOSEPAR bloco END {$$ = cria_node("comando", 7, terminalToken("function", FUNCTION), terminalToken($2, NAME), terminalToken("(", OPENPAR), $4, terminalToken(")", CLOSEPAR), $6, terminalToken("end", END)); }
 		| LOCAL listadenomes assignlistaexp { $$ = cria_node("comando", 3, terminalToken("local", LOCAL), $2, $3); }
@@ -175,7 +188,7 @@ tipoTree * cria_node(char nonT[20], int n_filhos, ...){
 		aux->filhos[i] = va_arg(params, tipoTree*);
 		i++;
 	}
-	
+
 	va_end(params);
 	return aux;
 }
@@ -191,7 +204,7 @@ tipoTree * terminalNumber(int token_n){
 }
 
 tipoTree * terminalToken(char id[20], int token_n){
-	
+
 	tipoTree *aux = malloc(sizeof(struct treeNode));
 	aux->num_filhos = 0;
 	aux->tokenNumber = token_n;
@@ -209,16 +222,16 @@ char * consultaToken(int token_n){
 		case  NOT:
 			return "T_NOT";
 			break;
-		case OR: 
+		case OR:
 			return "T_OR";
 			break;
-		case ELSEIF: 
+		case ELSEIF:
 			return "T_ELSEIF";
 			break;
-		case WHILE: 
+		case WHILE:
 			return "T_ WHILE";
 			break;
-		case DO: 
+		case DO:
 			return "T_DO";
 			break;
 		case FUNCTION:
@@ -227,76 +240,76 @@ char * consultaToken(int token_n){
 		case END:
 			return "T_END";
 			break;
-		case FOR: 
+		case FOR:
 			return "T_FOR";
 			break;
-		case ELSE: 
+		case ELSE:
 			return "T_ELSE";
 			break;
-		case IF: 
+		case IF:
 			return "T_IF";
 			break;
-		case THEN: 
+		case THEN:
 			return "T_THEN";
 			break;
-		case RETURN: 
+		case RETURN:
 			return "T_RETURN";
 			break;
-		case LOCAL: 
+		case LOCAL:
 			return "T_LOCAL";
 			break;
-		case NIL: 
+		case NIL:
 			return "T_NIL";
 			break;
 		case NAME:
 			return "T_NAME";
 			break;
-		case NUMBER: 
+		case NUMBER:
 			return "T_NUMBER";
 			break;
-		case PLUS: 
+		case PLUS:
 			return "T_PLUS";
 			break;
-		case MINUS: 
+		case MINUS:
 			return "T_MINUS";
 			break;
-		case TIMES: 
+		case TIMES:
 			return "T_TIMES";
 			break;
-		case DIV: 
+		case DIV:
 			return "T_DIV";
 			break;
-		case COMMA: 
+		case COMMA:
 			return "T_COMMA";
 			break;
-		case SEMICOL: 
+		case SEMICOL:
 			return "T_SEMICOL";
 			break;
-		case ASSIGN: 
+		case ASSIGN:
 			return "T_ASSIGN";
 			break;
-		case EQ: 
+		case EQ:
 			return "T_EQ";
 			break;
-		case NEQ: 
+		case NEQ:
 			return "T_NEQ";
 			break;
-		case LTEQ: 
+		case LTEQ:
 			return "T_LTEQ";
 			break;
-		case GTEQ: 
+		case GTEQ:
 			return "T_GTEQ";
 			break;
-		case LT: 
+		case LT:
 			return "T_LT";
 			break;
-		case GT: 
+		case GT:
 			return "T_GT";
 			break;
-		case CLOSEPAR: 
+		case CLOSEPAR:
 			return "T_CLOSEPAR";
 			break;
-		case OPENPAR: 
+		case OPENPAR:
 			return "T_OPENPAR";
 			break;
 		default :

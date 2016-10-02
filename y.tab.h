@@ -139,7 +139,7 @@ union YYSTYPE
 #line 25 "parser.y" /* yacc.c:1909  */
 
 	tipoTree *treePointer;
-	int integer; 
+	int integer;
 	char id[20];
 
 #line 146 "y.tab.h" /* yacc.c:1909  */
