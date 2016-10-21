@@ -67,7 +67,17 @@ programa: bloco {
 				if($1 != NULL){
 					$$ = cria_node("programa", 1, $1);
 					treeRoot = $$;
-					printTree(treeRoot);
+//					fprintf(yyout,"[programa ");
+				//	printTree(treeRoot);
+//					fprintf(yyout,"]");
+					//Inicializacao MIPS
+					fprintf(yyout, ".data\n");
+					fprintf(yyout, "_newline: .asciiz \"\\n\"\n");
+					fprintf(yyout,".text\n");
+					fprintf(yyout,".globl main\n\n");
+					fprintf(yyout,"main:\n");
+
+					geraCode(treeRoot);
 					fprintf(yyout,"\n");
 				}
 		};
@@ -142,7 +152,7 @@ commaNome	: { $$ = NULL;}
 			| commaNome COMMA NAME { $$ = cria_node("listadenomes", 3, $1, terminalToken(",", COMMA), terminalToken($3, NAME)); }
 			;
 
-listaexp	: exp commaExp { $$ = cria_node("listaexp", 2,$1, $2); }
+listaexp	: exp commaExp { $$ = cria_node("exp", 2,$1, $2); }
 			;
 
 commaExp	: { $$ = NULL; }
@@ -341,6 +351,121 @@ int printTree(tipoTree *p){
 			printTree(p->filhos[i]);
 	}
 	fprintf(yyout,"]");
+}
+
+int printTreeNew(tipoTree *p){
+
+	if(p == NULL)
+		return 0;
+	if(p->nonTerminal != NULL && p->num_filhos != 1){
+		fprintf(yyout,"[%s ", p->nonTerminal);
+	}
+	else if (p->num_filhos != 1)
+		fprintf(yyout, "[");
+	if(p->num_filhos == 0)
+	{
+		if (p->tokenNumber == NUMBER)
+			fprintf(yyout, "%s %d", consultaToken(p->tokenNumber), p->number);
+		else
+			fprintf(yyout, "%s %s", consultaToken(p->tokenNumber), p->id);
+	}
+	else
+	{
+		int i;
+		for(i = 0; i < p->num_filhos; i++)
+			printTree(p->filhos[i]);
+	}
+	if (p->num_filhos != 1)
+		fprintf(yyout,"]");
+}
+
+int geraCodeListaExp(tipoTree *p){
+
+	if( strcmp(p->nonTerminal,"opbin") == 0 ){
+
+		//resolve primeiro filho
+		if (p->filhos[0]->tokenNumber == NUMBER) {
+
+			//Primeiro fator eh um numero
+			fprintf(yyout,"li $a0, %d\n", p->filhos[0]->number);
+			fprintf(yyout,"sw $a0, 0($sp)\n");
+			fprintf(yyout,"addiu $sp, $sp, -4\n");
+		}
+		else
+		{
+			//Primeiro fator espera um resultado
+			geraCodeListaExp(p->filhos[0]);
+			fprintf(yyout,"sw $a0, 0($sp)\n");
+			fprintf(yyout,"addiu $sp, $sp, -4\n");
+		}
+		if (p->filhos[3]->tokenNumber == NUMBER) {
+
+			//Segundo fator eh um numero
+			fprintf(yyout,"li $a0, %d\n", p->filhos[2]->number);
+			fprintf(yyout,"sw $a0, 0($sp)\n");
+			fprintf(yyout,"addiu $sp, $sp, -4\n");
+		}
+		else
+		{
+			//Segundo fator espera um resultado
+			geraCodeListaExp(p->filhos[2]);
+			fprintf(yyout,"sw $a0, 0($sp)\n");
+			fprintf(yyout,"addiu $sp, $sp, -4\n");
+		}
+		//Opera fatores
+		fprintf(yyout,"lw $t1, 4($sp)\n");
+		fprintf(yyout,"addiu $sp, $sp, 4\n");
+		fprintf(yyout,"lw $a0, 4($sp)\n");
+		fprintf(yyout,"addiu $sp, $sp, 4\n");
+
+		if(p->filhos[1]->tokenNumber == PLUS)
+			fprintf(yyout,"add $a0, $a0, $t1\n");
+		else if(p->filhos[1]->tokenNumber == MINUS)
+			fprintf(yyout,"sub $a0, $a0, $t1\n");
+		else if(p->filhos[1]->tokenNumber == TIMES)
+		{
+			fprintf(yyout,"mult $a0, $t1\n");
+			fprintf(yyout,"mflo $a0\n");
+		}
+		else if(p->filhos[1]->tokenNumber == DIV){
+			fprintf(yyout,"div $a0, $t1\n");
+			fprintf(yyout,"mflo $a0\n");
+		}
+	}
+	else if(p->tokenNumber == NUMBER)
+	{
+		printf("achei o number\n");
+		fprintf(yyout, "li $a0, %d\n",p->number);
+		return 0;
+	}
+	else
+	{
+		geraCodeListaExp(p->filhos[0]);
+	}
+}
+
+int geraCode(tipoTree *p){
+
+	int i;
+	if(p == NULL)
+		return 0;
+	if( strcmp(p->nonTerminal, "chamadadefuncao") == 0 )
+	{
+		if( strcmp(p->filhos[0]->id, "print") == 0){
+			geraCode(p->filhos[2]);
+			fprintf(yyout, "li $v0, 1");
+			fprintf(yyout, "syscall");
+		}
+		return 0;
+	}
+
+	if( strcmp(p->nonTerminal, "listaexp") == 0 ){
+		geraCodeListaExp(p);
+	}
+
+	for(i = 0; i < p->num_filhos; i++){
+		geraCode(p->filhos[i]);
+	}
 }
 
 int main(int argc, char** argv){
