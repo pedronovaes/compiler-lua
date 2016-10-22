@@ -534,12 +534,12 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    66,    66,    89,    91,    92,    95,    96,    98,    99,
-     102,   103,   104,   105,   106,   107,   109,   110,   111,   114,
-     115,   118,   119,   122,   123,   126,   127,   130,   131,   134,
-     137,   138,   141,   142,   145,   148,   151,   152,   155,   158,
-     159,   162,   163,   164,   165,   166,   167,   168,   169,   170,
-     171,   172,   173,   174,   175,   176,   177,   178,   179,   180
+       0,    66,    66,    91,    93,    94,    97,    98,   100,   101,
+     104,   105,   106,   107,   108,   109,   111,   112,   113,   116,
+     117,   120,   121,   124,   125,   128,   129,   132,   133,   136,
+     139,   140,   143,   144,   147,   150,   153,   154,   157,   160,
+     161,   164,   165,   166,   167,   168,   169,   170,   171,   172,
+     173,   174,   175,   176,   177,   178,   179,   180,   181,   182
 };
 #endif
 
@@ -588,16 +588,16 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-       9,   -26,     9,    13,   -24,    13,   -22,   -20,    13,    15,
-      25,   -26,   -26,     9,   -26,   -26,    33,    32,    13,   -26,
-      13,    13,    15,   -26,   -26,   111,    36,    42,    26,   -26,
-      38,    40,   -26,   206,    13,    35,   -26,   -26,   -26,     9,
-      13,   -26,   194,   -26,   -26,     9,    13,    13,    13,    13,
+       9,   -26,     9,    13,   -24,    13,   -22,   -20,    13,     8,
+      24,   -26,   -26,     9,   -26,   -26,    21,    32,    13,   -26,
+      13,    13,     8,   -26,   -26,   111,    26,    42,    27,   -26,
+      37,    40,   -26,   206,    13,    35,   -26,   -26,   -26,     9,
+      13,   -26,   194,    17,   -26,     9,    13,    13,    13,    13,
       13,    13,    13,    13,    13,    13,    13,    13,    13,     9,
-     -20,    13,   -26,   -26,   -26,    41,    44,    16,   -26,   -26,
-     -26,    51,   -11,   -26,   -26,   -11,   -15,   -15,   -15,   -15,
+     -20,    13,   -26,   -26,   -26,    41,    44,    15,   -26,   -26,
+     -26,    52,   -26,    17,    17,   -26,   -15,   -15,   -15,   -15,
      -15,   -15,   218,   124,   134,   -26,    71,   -26,   -26,    13,
-     -26,   -26,   -26,    13,    10,     9,   206,   157,    13,     9,
+     -26,   -26,   -26,    13,    -3,     9,   206,   157,    13,     9,
       82,    83,    13,    85,   178,   -26,   -26,   -26,   206,     9,
        9,    86,   -26,   -26
 };
@@ -624,8 +624,8 @@ static const yytype_uint8 yydefact[] =
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -26,   -26,     2,    52,   -10,    -4,   -26,   -26,   -26,   -26,
-     -26,   -26,    59,   -26,     0,    -6,   -26,   -25,   -26,    28
+     -26,   -26,     2,    54,   -10,    -4,   -26,   -26,   -26,   -26,
+     -26,   -26,    57,   -26,     0,    -6,   -26,   -25,   -26,    28
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
@@ -641,15 +641,15 @@ static const yytype_int8 yydefgoto[] =
 static const yytype_uint8 yytable[] =
 {
       15,    30,    15,    38,    17,    46,    47,    48,    49,    39,
-      47,    48,     1,    15,     2,    69,     3,     4,    26,     5,
-      28,     6,    29,    98,    99,    36,     7,     8,    18,    38,
-      34,    25,    19,    27,    20,    39,    88,    40,    41,    15,
-      58,    60,    61,    63,    67,    15,    42,    71,    43,    44,
-      89,     9,    21,    59,    87,    22,    23,    92,    91,    15,
+      98,    99,     1,    15,     2,    69,     3,     4,    26,     5,
+      28,     6,    29,    34,    36,    40,     7,     8,    18,    38,
+      58,    25,    19,    27,    20,    39,    88,    46,    41,    15,
+      49,    61,    60,    63,    67,    15,    42,    71,    43,    44,
+      89,     9,    21,    59,    87,    22,    23,    91,    92,    15,
       90,    85,    46,    47,    48,    49,    50,    51,    52,    53,
       54,    55,    56,    57,    72,    73,    74,    75,    76,    77,
       78,    79,    80,    81,    82,    83,    84,    95,   106,   107,
-     109,    68,   113,    66,     0,    15,     0,   101,     0,    15,
+     109,    66,   113,    68,     0,    15,     0,   101,     0,    15,
        0,   105,     0,     0,     0,     0,     0,     0,     0,    15,
       15,   111,   112,     0,     0,     0,    45,    96,     0,     0,
        0,    97,     0,     0,     0,     0,   104,     0,     0,     0,
@@ -670,15 +670,15 @@ static const yytype_uint8 yytable[] =
 static const yytype_int8 yycheck[] =
 {
        0,     7,     2,    13,     2,    20,    21,    22,    23,    13,
-      21,    22,     3,    13,     5,    40,     7,     8,    42,    10,
-      42,    12,    42,    13,    14,     0,    17,    18,    15,    39,
-      15,     3,    19,     5,    21,    39,    61,     4,     6,    39,
-       4,    15,     4,     3,     9,    45,    18,    45,    20,    21,
-       9,    42,    39,    11,    60,    42,    43,     6,    42,    59,
+      13,    14,     3,    13,     5,    40,     7,     8,    42,    10,
+      42,    12,    42,    15,     0,     4,    17,    18,    15,    39,
+       4,     3,    19,     5,    21,    39,    61,    20,     6,    39,
+      23,     4,    15,     3,     9,    45,    18,    45,    20,    21,
+       9,    42,    39,    11,    60,    42,    43,    42,     6,    59,
       16,    59,    20,    21,    22,    23,    24,    25,    26,    27,
       28,    29,    30,    31,    46,    47,    48,    49,    50,    51,
       52,    53,    54,    55,    56,    57,    58,    16,     6,     6,
-       5,    39,     6,    34,    -1,    95,    -1,    95,    -1,    99,
+       5,    34,     6,    39,    -1,    95,    -1,    95,    -1,    99,
       -1,    99,    -1,    -1,    -1,    -1,    -1,    -1,    -1,   109,
      110,   109,   110,    -1,    -1,    -1,     5,    89,    -1,    -1,
       -1,    93,    -1,    -1,    -1,    -1,    98,    -1,    -1,    -1,
@@ -1416,366 +1416,368 @@ yyreduce:
 					(yyval.treePointer) = cria_node("programa", 1, (yyvsp[0].treePointer));
 					treeRoot = (yyval.treePointer);
 //					fprintf(yyout,"[programa ");
-				//	printTree(treeRoot);
+					// printTree(treeRoot);
 //					fprintf(yyout,"]");
 					//Inicializacao MIPS
-					fprintf(yyout, ".data\n");
+					fprintf(yyout, "\n.data\n");
 					fprintf(yyout, "_newline: .asciiz \"\\n\"\n");
 					fprintf(yyout,".text\n");
 					fprintf(yyout,".globl main\n\n");
 					fprintf(yyout,"main:\n");
 
 					geraCode(treeRoot);
+					fprintf(yyout, "\nli $v0, 10\n");
+					fprintf(yyout, "syscall");
 					fprintf(yyout,"\n");
 				}
 		}
-#line 1433 "y.tab.c" /* yacc.c:1646  */
+#line 1435 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 89 "parser.y" /* yacc.c:1646  */
+#line 91 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("bloco", 1, (yyvsp[0].treePointer)); }
-#line 1439 "y.tab.c" /* yacc.c:1646  */
+#line 1441 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 91 "parser.y" /* yacc.c:1646  */
+#line 93 "parser.y" /* yacc.c:1646  */
     {(yyval.treePointer) = cria_node("bloco", 2, (yyvsp[-1].treePointer), (yyvsp[0].treePointer)); }
-#line 1445 "y.tab.c" /* yacc.c:1646  */
+#line 1447 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 92 "parser.y" /* yacc.c:1646  */
+#line 94 "parser.y" /* yacc.c:1646  */
     {(yyval.treePointer) = cria_node("bloco", 1, (yyvsp[0].treePointer));}
-#line 1451 "y.tab.c" /* yacc.c:1646  */
+#line 1453 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 95 "parser.y" /* yacc.c:1646  */
+#line 97 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("comando", 2, (yyvsp[-1].treePointer), (yyvsp[0].treePointer));}
-#line 1457 "y.tab.c" /* yacc.c:1646  */
+#line 1459 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 96 "parser.y" /* yacc.c:1646  */
+#line 98 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = NULL;}
-#line 1463 "y.tab.c" /* yacc.c:1646  */
+#line 1465 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 98 "parser.y" /* yacc.c:1646  */
+#line 100 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = NULL; }
-#line 1469 "y.tab.c" /* yacc.c:1646  */
+#line 1471 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 99 "parser.y" /* yacc.c:1646  */
+#line 101 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("bloco", 1, (yyvsp[0].treePointer)); }
-#line 1475 "y.tab.c" /* yacc.c:1646  */
+#line 1477 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 102 "parser.y" /* yacc.c:1646  */
+#line 104 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = terminalToken(";", SEMICOL); }
-#line 1481 "y.tab.c" /* yacc.c:1646  */
+#line 1483 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 103 "parser.y" /* yacc.c:1646  */
+#line 105 "parser.y" /* yacc.c:1646  */
     {(yyval.treePointer) = cria_node("comando", 3, (yyvsp[-2].treePointer), terminalToken("=", ASSIGN), (yyvsp[0].treePointer)); }
-#line 1487 "y.tab.c" /* yacc.c:1646  */
+#line 1489 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 104 "parser.y" /* yacc.c:1646  */
+#line 106 "parser.y" /* yacc.c:1646  */
     {(yyval.treePointer) = cria_node("comando", 1, (yyvsp[0].treePointer)); }
-#line 1493 "y.tab.c" /* yacc.c:1646  */
+#line 1495 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 105 "parser.y" /* yacc.c:1646  */
+#line 107 "parser.y" /* yacc.c:1646  */
     {(yyval.treePointer) = cria_node("comando", 3, terminalToken("do", DO), terminalToken("end", END)); }
-#line 1499 "y.tab.c" /* yacc.c:1646  */
+#line 1501 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 106 "parser.y" /* yacc.c:1646  */
+#line 108 "parser.y" /* yacc.c:1646  */
     {(yyval.treePointer) = cria_node("comando", 5, terminalToken("while", WHILE), (yyvsp[-3].treePointer), terminalToken("do", DO), (yyvsp[-1].treePointer), terminalToken("end", END)); }
-#line 1505 "y.tab.c" /* yacc.c:1646  */
+#line 1507 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 107 "parser.y" /* yacc.c:1646  */
+#line 109 "parser.y" /* yacc.c:1646  */
     {(yyval.treePointer) = cria_node("comando", 10, terminalToken("for", FOR), terminalToken((yyvsp[-8].id), NAME), terminalToken("=", ASSIGN), (yyvsp[-6].treePointer), terminalToken(",", COMMA), (yyvsp[-4].treePointer), (yyvsp[-3].treePointer), terminalToken("do", DO), (yyvsp[-1].treePointer), terminalToken("end", END) ); }
-#line 1511 "y.tab.c" /* yacc.c:1646  */
+#line 1513 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 109 "parser.y" /* yacc.c:1646  */
+#line 111 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("comando", 7, terminalToken("if", IF), (yyvsp[-5].treePointer), terminalToken("then", THEN), (yyvsp[-3].treePointer), (yyvsp[-2].treePointer), (yyvsp[-1].treePointer), terminalToken("end", END)); }
-#line 1517 "y.tab.c" /* yacc.c:1646  */
+#line 1519 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 110 "parser.y" /* yacc.c:1646  */
+#line 112 "parser.y" /* yacc.c:1646  */
     {(yyval.treePointer) = cria_node("comando", 7, terminalToken("function", FUNCTION), terminalToken((yyvsp[-5].id), NAME), terminalToken("(", OPENPAR), (yyvsp[-3].treePointer), terminalToken(")", CLOSEPAR), (yyvsp[-1].treePointer), terminalToken("end", END)); }
-#line 1523 "y.tab.c" /* yacc.c:1646  */
+#line 1525 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 111 "parser.y" /* yacc.c:1646  */
+#line 113 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("comando", 3, terminalToken("local", LOCAL), (yyvsp[-1].treePointer), (yyvsp[0].treePointer)); }
-#line 1529 "y.tab.c" /* yacc.c:1646  */
+#line 1531 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 114 "parser.y" /* yacc.c:1646  */
+#line 116 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = NULL; }
-#line 1535 "y.tab.c" /* yacc.c:1646  */
+#line 1537 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 115 "parser.y" /* yacc.c:1646  */
+#line 117 "parser.y" /* yacc.c:1646  */
     { cria_node("listaexp", 2, terminalToken(",", COMMA), (yyvsp[0].treePointer)); }
-#line 1541 "y.tab.c" /* yacc.c:1646  */
+#line 1543 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 118 "parser.y" /* yacc.c:1646  */
+#line 120 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = NULL; }
-#line 1547 "y.tab.c" /* yacc.c:1646  */
+#line 1549 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 119 "parser.y" /* yacc.c:1646  */
+#line 121 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("elseif", 5, (yyvsp[-4].treePointer), terminalToken("elseif", ELSEIF), (yyvsp[-2].treePointer), terminalToken("then", THEN), (yyvsp[0].treePointer)); }
-#line 1553 "y.tab.c" /* yacc.c:1646  */
+#line 1555 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 122 "parser.y" /* yacc.c:1646  */
+#line 124 "parser.y" /* yacc.c:1646  */
     {(yyval.treePointer) = NULL; }
-#line 1559 "y.tab.c" /* yacc.c:1646  */
+#line 1561 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 123 "parser.y" /* yacc.c:1646  */
+#line 125 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("comando", 2, terminalToken("else", ELSE), (yyvsp[0].treePointer)); }
-#line 1565 "y.tab.c" /* yacc.c:1646  */
+#line 1567 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 126 "parser.y" /* yacc.c:1646  */
+#line 128 "parser.y" /* yacc.c:1646  */
     {(yyval.treePointer) = NULL;}
-#line 1571 "y.tab.c" /* yacc.c:1646  */
+#line 1573 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 127 "parser.y" /* yacc.c:1646  */
+#line 129 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("listadenomes", 1, (yyvsp[0].treePointer)); }
-#line 1577 "y.tab.c" /* yacc.c:1646  */
+#line 1579 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 130 "parser.y" /* yacc.c:1646  */
+#line 132 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = NULL;}
-#line 1583 "y.tab.c" /* yacc.c:1646  */
+#line 1585 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 131 "parser.y" /* yacc.c:1646  */
+#line 133 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("listaexp", 2, terminalToken("=", ASSIGN), (yyvsp[0].treePointer)); }
-#line 1589 "y.tab.c" /* yacc.c:1646  */
+#line 1591 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 134 "parser.y" /* yacc.c:1646  */
+#line 136 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("comandoret", 3, terminalToken("return", RETURN), (yyvsp[-1].treePointer), (yyvsp[0].treePointer)); }
-#line 1595 "y.tab.c" /* yacc.c:1646  */
+#line 1597 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 137 "parser.y" /* yacc.c:1646  */
+#line 139 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = NULL; }
-#line 1601 "y.tab.c" /* yacc.c:1646  */
+#line 1603 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 138 "parser.y" /* yacc.c:1646  */
+#line 140 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("listaexp", 1, (yyvsp[0].treePointer)); }
-#line 1607 "y.tab.c" /* yacc.c:1646  */
+#line 1609 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 141 "parser.y" /* yacc.c:1646  */
+#line 143 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = NULL; }
-#line 1613 "y.tab.c" /* yacc.c:1646  */
+#line 1615 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 142 "parser.y" /* yacc.c:1646  */
+#line 144 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = terminalToken(";", SEMICOL); }
-#line 1619 "y.tab.c" /* yacc.c:1646  */
+#line 1621 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 145 "parser.y" /* yacc.c:1646  */
+#line 147 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("chamadadefuncao", 4,terminalToken((yyvsp[-3].id), NAME), terminalToken("(", OPENPAR), (yyvsp[-1].treePointer), terminalToken(")", CLOSEPAR)); }
-#line 1625 "y.tab.c" /* yacc.c:1646  */
+#line 1627 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 148 "parser.y" /* yacc.c:1646  */
+#line 150 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("listadenomes", 2, terminalToken((yyvsp[-1].id), NAME), (yyvsp[0].treePointer)); }
-#line 1631 "y.tab.c" /* yacc.c:1646  */
+#line 1633 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 151 "parser.y" /* yacc.c:1646  */
+#line 153 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = NULL;}
-#line 1637 "y.tab.c" /* yacc.c:1646  */
+#line 1639 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 152 "parser.y" /* yacc.c:1646  */
+#line 154 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("listadenomes", 3, (yyvsp[-2].treePointer), terminalToken(",", COMMA), terminalToken((yyvsp[0].id), NAME)); }
-#line 1643 "y.tab.c" /* yacc.c:1646  */
+#line 1645 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 155 "parser.y" /* yacc.c:1646  */
-    { (yyval.treePointer) = cria_node("exp", 2,(yyvsp[-1].treePointer), (yyvsp[0].treePointer)); }
-#line 1649 "y.tab.c" /* yacc.c:1646  */
+#line 157 "parser.y" /* yacc.c:1646  */
+    { (yyval.treePointer) = cria_node("listaexp", 2,(yyvsp[-1].treePointer), (yyvsp[0].treePointer)); }
+#line 1651 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 158 "parser.y" /* yacc.c:1646  */
+#line 160 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = NULL; }
-#line 1655 "y.tab.c" /* yacc.c:1646  */
+#line 1657 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 159 "parser.y" /* yacc.c:1646  */
+#line 161 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("listaexp", 3, (yyvsp[-2].treePointer), terminalToken(",", COMMA), (yyvsp[0].treePointer)); }
-#line 1661 "y.tab.c" /* yacc.c:1646  */
+#line 1663 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 162 "parser.y" /* yacc.c:1646  */
+#line 164 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = terminalNumber((yyvsp[0].integer)); }
-#line 1667 "y.tab.c" /* yacc.c:1646  */
+#line 1669 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 163 "parser.y" /* yacc.c:1646  */
+#line 165 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = terminalToken((yyvsp[0].id), NAME); }
-#line 1673 "y.tab.c" /* yacc.c:1646  */
+#line 1675 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 164 "parser.y" /* yacc.c:1646  */
+#line 166 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = terminalToken("nil", NIL); }
-#line 1679 "y.tab.c" /* yacc.c:1646  */
+#line 1681 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 165 "parser.y" /* yacc.c:1646  */
+#line 167 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("chamadadefuncao", 1, (yyvsp[0].treePointer)); }
-#line 1685 "y.tab.c" /* yacc.c:1646  */
+#line 1687 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 166 "parser.y" /* yacc.c:1646  */
+#line 168 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken("+", PLUS), (yyvsp[0].treePointer)); }
-#line 1691 "y.tab.c" /* yacc.c:1646  */
+#line 1693 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 167 "parser.y" /* yacc.c:1646  */
+#line 169 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken("-", MINUS), (yyvsp[0].treePointer)); }
-#line 1697 "y.tab.c" /* yacc.c:1646  */
+#line 1699 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 168 "parser.y" /* yacc.c:1646  */
+#line 170 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken("*", TIMES), (yyvsp[0].treePointer)); }
-#line 1703 "y.tab.c" /* yacc.c:1646  */
+#line 1705 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 169 "parser.y" /* yacc.c:1646  */
+#line 171 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken("/", DIV), (yyvsp[0].treePointer)); }
-#line 1709 "y.tab.c" /* yacc.c:1646  */
+#line 1711 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 170 "parser.y" /* yacc.c:1646  */
+#line 172 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken("or", OR), (yyvsp[0].treePointer)); }
-#line 1715 "y.tab.c" /* yacc.c:1646  */
+#line 1717 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 171 "parser.y" /* yacc.c:1646  */
+#line 173 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken("and", AND), (yyvsp[0].treePointer)); }
-#line 1721 "y.tab.c" /* yacc.c:1646  */
+#line 1723 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 172 "parser.y" /* yacc.c:1646  */
+#line 174 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken("<", LT), (yyvsp[0].treePointer)); }
-#line 1727 "y.tab.c" /* yacc.c:1646  */
+#line 1729 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 173 "parser.y" /* yacc.c:1646  */
+#line 175 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken("<=", LTEQ), (yyvsp[0].treePointer)); }
-#line 1733 "y.tab.c" /* yacc.c:1646  */
+#line 1735 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 174 "parser.y" /* yacc.c:1646  */
+#line 176 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken(">", GT), (yyvsp[0].treePointer)); }
-#line 1739 "y.tab.c" /* yacc.c:1646  */
+#line 1741 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 175 "parser.y" /* yacc.c:1646  */
+#line 177 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken(">=", GTEQ), (yyvsp[0].treePointer)); }
-#line 1745 "y.tab.c" /* yacc.c:1646  */
+#line 1747 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 176 "parser.y" /* yacc.c:1646  */
+#line 178 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken("==", EQ), (yyvsp[0].treePointer)); }
-#line 1751 "y.tab.c" /* yacc.c:1646  */
+#line 1753 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 177 "parser.y" /* yacc.c:1646  */
+#line 179 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("opbin", 3, (yyvsp[-2].treePointer), terminalToken("~=", NEQ), (yyvsp[0].treePointer)); }
-#line 1757 "y.tab.c" /* yacc.c:1646  */
+#line 1759 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 178 "parser.y" /* yacc.c:1646  */
+#line 180 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("opunaria", 2, terminalToken("not", NOT), (yyvsp[0].treePointer)); }
-#line 1763 "y.tab.c" /* yacc.c:1646  */
+#line 1765 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 179 "parser.y" /* yacc.c:1646  */
+#line 181 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("opunaria", 2, terminalToken("-", MINUS), (yyvsp[0].treePointer)); }
-#line 1769 "y.tab.c" /* yacc.c:1646  */
+#line 1771 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 180 "parser.y" /* yacc.c:1646  */
+#line 182 "parser.y" /* yacc.c:1646  */
     { (yyval.treePointer) = cria_node("exp", 3,terminalToken("(", OPENPAR), (yyvsp[-1].treePointer), terminalToken(")", CLOSEPAR)); }
-#line 1775 "y.tab.c" /* yacc.c:1646  */
+#line 1777 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1779 "y.tab.c" /* yacc.c:1646  */
+#line 1781 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2003,7 +2005,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 183 "parser.y" /* yacc.c:1906  */
+#line 185 "parser.y" /* yacc.c:1906  */
 
 
 tipoTree * cria_node(char nonT[20], int n_filhos, ...){
@@ -2203,8 +2205,11 @@ int printTreeNew(tipoTree *p){
 		fprintf(yyout,"]");
 }
 
-int geraCodeListaExp(tipoTree *p){
+int geraCodeOpBin(tipoTree *p){
 
+	int i;
+	if (p == NULL)
+		return 0;
 	if( strcmp(p->nonTerminal,"opbin") == 0 ){
 
 		//resolve primeiro filho
@@ -2218,11 +2223,18 @@ int geraCodeListaExp(tipoTree *p){
 		else
 		{
 			//Primeiro fator espera um resultado
-			geraCodeListaExp(p->filhos[0]);
-			fprintf(yyout,"sw $a0, 0($sp)\n");
-			fprintf(yyout,"addiu $sp, $sp, -4\n");
+			if ( strcmp(p->filhos[0]->nonTerminal, "exp") == 0 ){
+				geraCodeOpBin(p->filhos[0]->filhos[1]);
+				fprintf(yyout,"sw $a0, 0($sp)\n");
+				fprintf(yyout,"addiu $sp, $sp, -4\n");
+			}
+			else{
+				geraCodeOpBin(p->filhos[0]);
+				fprintf(yyout,"sw $a0, 0($sp)\n");
+				fprintf(yyout,"addiu $sp, $sp, -4\n");
+			}
 		}
-		if (p->filhos[3]->tokenNumber == NUMBER) {
+		if (p->filhos[2]->tokenNumber == NUMBER) {
 
 			//Segundo fator eh um numero
 			fprintf(yyout,"li $a0, %d\n", p->filhos[2]->number);
@@ -2231,12 +2243,20 @@ int geraCodeListaExp(tipoTree *p){
 		}
 		else
 		{
-			//Segundo fator espera um resultado
-			geraCodeListaExp(p->filhos[2]);
-			fprintf(yyout,"sw $a0, 0($sp)\n");
-			fprintf(yyout,"addiu $sp, $sp, -4\n");
-		}
 
+			if ( strcmp(p->filhos[2]->nonTerminal, "exp") == 0 ){
+				geraCodeOpBin(p->filhos[2]->filhos[1]);
+				fprintf(yyout,"sw $a0, 0($sp)\n");
+				fprintf(yyout,"addiu $sp, $sp, -4\n");
+			}
+			else
+			{
+				//Segundo fator espera um resultado
+				geraCodeOpBin(p->filhos[2]);
+				fprintf(yyout,"sw $a0, 0($sp)\n");
+				fprintf(yyout,"addiu $sp, $sp, -4\n");
+			}
+		}
 		//Opera fatores
 		fprintf(yyout,"lw $t1, 4($sp)\n");
 		fprintf(yyout,"addiu $sp, $sp, 4\n");
@@ -2257,15 +2277,18 @@ int geraCodeListaExp(tipoTree *p){
 			fprintf(yyout,"mflo $a0\n");
 		}
 	}
-	else if(p->tokenNumber == NUMBER)
+	else if(p->filhos[0]->tokenNumber == NUMBER)
 	{
-		printf("entrei aqui\n");
-		fprintf(yyout, "li $a0, %d\n",p->number);
+		fprintf(yyout, "li $a0, %d\n",p->filhos[0]->number);
 		return 0;
 	}
 	else
 	{
-		geraCodeListaExp(p->filhos[0]);
+		for(i = 0; i < p->num_filhos; i++)
+
+			if (p->filhos[i] != NULL) {
+				geraCodeOpBin(p->filhos[i]);
+			}
 	}
 }
 
@@ -2274,23 +2297,35 @@ int geraCode(tipoTree *p){
 	int i;
 	if(p == NULL)
 		return 0;
+
+	printf("entrei em %s\n", p->nonTerminal);
+
 	if( strcmp(p->nonTerminal, "chamadadefuncao") == 0 )
 	{
 		if( strcmp(p->filhos[0]->id, "print") == 0){
+			printf("entrei no print\n");
 			geraCode(p->filhos[2]);
-			fprintf(yyout, "li $v0, 1");
-			fprintf(yyout, "syscall");
+			printf("saiu print\n");
+			fprintf(yyout, "li $v0, 1\n");
+			fprintf(yyout, "syscall\n");
 		}
 		return 0;
 	}
 
 	if( strcmp(p->nonTerminal, "listaexp") == 0 ){
-		geraCodeListaExp(p);
+		printf("entrei na listaexp\n");
+		geraCodeOpBin(p);
+		printf("sai de listaexp\n");
+		return 0;
 	}
 
-	for(i = 0; i < p->num_filhos; i++){
-		geraCode(p->filhos[i]);
+	if(p->filhos[0]->nonTerminal != NULL)
+	{
+		for(i = 0; i < p->num_filhos; i++){
+				geraCode(p->filhos[i]);
+		}
 	}
+	printf("terminei os filhos de %s\n", p->nonTerminal);
 }
 
 int main(int argc, char** argv){

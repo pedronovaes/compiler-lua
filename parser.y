@@ -54,8 +54,8 @@ localContext globalContext;
 %left OR
 %left LT GT LTEQ GTEQ EQ NEQ
 %left OPENPAR CLOSEPAR
-%left TIMES DIV
 %left PLUS MINUS
+%left TIMES DIV
 
 %right NOT
 
@@ -68,16 +68,18 @@ programa: bloco {
 					$$ = cria_node("programa", 1, $1);
 					treeRoot = $$;
 //					fprintf(yyout,"[programa ");
-				//	printTree(treeRoot);
+					// printTree(treeRoot);
 //					fprintf(yyout,"]");
 					//Inicializacao MIPS
-					fprintf(yyout, ".data\n");
+					fprintf(yyout, "\n.data\n");
 					fprintf(yyout, "_newline: .asciiz \"\\n\"\n");
 					fprintf(yyout,".text\n");
 					fprintf(yyout,".globl main\n\n");
 					fprintf(yyout,"main:\n");
 
 					geraCode(treeRoot);
+					fprintf(yyout, "\nli $v0, 10\n");
+					fprintf(yyout, "syscall");
 					fprintf(yyout,"\n");
 				}
 		};
@@ -152,7 +154,7 @@ commaNome	: { $$ = NULL;}
 			| commaNome COMMA NAME { $$ = cria_node("listadenomes", 3, $1, terminalToken(",", COMMA), terminalToken($3, NAME)); }
 			;
 
-listaexp	: exp commaExp { $$ = cria_node("exp", 2,$1, $2); }
+listaexp	: exp commaExp { $$ = cria_node("listaexp", 2,$1, $2); }
 			;
 
 commaExp	: { $$ = NULL; }
@@ -379,8 +381,11 @@ int printTreeNew(tipoTree *p){
 		fprintf(yyout,"]");
 }
 
-int geraCodeListaExp(tipoTree *p){
+int geraCodeOpBin(tipoTree *p){
 
+	int i;
+	if (p == NULL)
+		return 0;
 	if( strcmp(p->nonTerminal,"opbin") == 0 ){
 
 		//resolve primeiro filho
@@ -394,11 +399,18 @@ int geraCodeListaExp(tipoTree *p){
 		else
 		{
 			//Primeiro fator espera um resultado
-			geraCodeListaExp(p->filhos[0]);
-			fprintf(yyout,"sw $a0, 0($sp)\n");
-			fprintf(yyout,"addiu $sp, $sp, -4\n");
+			if ( strcmp(p->filhos[0]->nonTerminal, "exp") == 0 ){
+				geraCodeOpBin(p->filhos[0]->filhos[1]);
+				fprintf(yyout,"sw $a0, 0($sp)\n");
+				fprintf(yyout,"addiu $sp, $sp, -4\n");
+			}
+			else{
+				geraCodeOpBin(p->filhos[0]);
+				fprintf(yyout,"sw $a0, 0($sp)\n");
+				fprintf(yyout,"addiu $sp, $sp, -4\n");
+			}
 		}
-		if (p->filhos[3]->tokenNumber == NUMBER) {
+		if (p->filhos[2]->tokenNumber == NUMBER) {
 
 			//Segundo fator eh um numero
 			fprintf(yyout,"li $a0, %d\n", p->filhos[2]->number);
@@ -407,10 +419,19 @@ int geraCodeListaExp(tipoTree *p){
 		}
 		else
 		{
-			//Segundo fator espera um resultado
-			geraCodeListaExp(p->filhos[2]);
-			fprintf(yyout,"sw $a0, 0($sp)\n");
-			fprintf(yyout,"addiu $sp, $sp, -4\n");
+
+			if ( strcmp(p->filhos[2]->nonTerminal, "exp") == 0 ){
+				geraCodeOpBin(p->filhos[2]->filhos[1]);
+				fprintf(yyout,"sw $a0, 0($sp)\n");
+				fprintf(yyout,"addiu $sp, $sp, -4\n");
+			}
+			else
+			{
+				//Segundo fator espera um resultado
+				geraCodeOpBin(p->filhos[2]);
+				fprintf(yyout,"sw $a0, 0($sp)\n");
+				fprintf(yyout,"addiu $sp, $sp, -4\n");
+			}
 		}
 		//Opera fatores
 		fprintf(yyout,"lw $t1, 4($sp)\n");
@@ -432,15 +453,18 @@ int geraCodeListaExp(tipoTree *p){
 			fprintf(yyout,"mflo $a0\n");
 		}
 	}
-	else if(p->tokenNumber == NUMBER)
+	else if(p->filhos[0]->tokenNumber == NUMBER)
 	{
-		printf("achei o number\n");
-		fprintf(yyout, "li $a0, %d\n",p->number);
+		fprintf(yyout, "li $a0, %d\n",p->filhos[0]->number);
 		return 0;
 	}
 	else
 	{
-		geraCodeListaExp(p->filhos[0]);
+		for(i = 0; i < p->num_filhos; i++)
+
+			if (p->filhos[i] != NULL) {
+				geraCodeOpBin(p->filhos[i]);
+			}
 	}
 }
 
@@ -449,23 +473,35 @@ int geraCode(tipoTree *p){
 	int i;
 	if(p == NULL)
 		return 0;
+
+	printf("entrei em %s\n", p->nonTerminal);
+
 	if( strcmp(p->nonTerminal, "chamadadefuncao") == 0 )
 	{
 		if( strcmp(p->filhos[0]->id, "print") == 0){
+			printf("entrei no print\n");
 			geraCode(p->filhos[2]);
-			fprintf(yyout, "li $v0, 1");
-			fprintf(yyout, "syscall");
+			printf("saiu print\n");
+			fprintf(yyout, "li $v0, 1\n");
+			fprintf(yyout, "syscall\n");
 		}
 		return 0;
 	}
 
 	if( strcmp(p->nonTerminal, "listaexp") == 0 ){
-		geraCodeListaExp(p);
+		printf("entrei na listaexp\n");
+		geraCodeOpBin(p);
+		printf("sai de listaexp\n");
+		return 0;
 	}
 
-	for(i = 0; i < p->num_filhos; i++){
-		geraCode(p->filhos[i]);
+	if(p->filhos[0]->nonTerminal != NULL)
+	{
+		for(i = 0; i < p->num_filhos; i++){
+				geraCode(p->filhos[i]);
+		}
 	}
+	printf("terminei os filhos de %s\n", p->nonTerminal);
 }
 
 int main(int argc, char** argv){
