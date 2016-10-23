@@ -2065,7 +2065,7 @@ char * consultaToken(int token_n){
 			return "T_ELSEIF";
 			break;
 		case WHILE:
-			return "T_ WHILE";
+			return "T_WHILE";
 			break;
 		case DO:
 			return "T_DO";
@@ -2275,6 +2275,38 @@ int geraCodeOpBin(tipoTree *p){
 		else if(p->filhos[1]->tokenNumber == DIV){
 			fprintf(yyout,"div $a0, $t1\n");
 			fprintf(yyout,"mflo $a0\n");
+		}
+		else if(p->filhos[1]->tokenNumber == EQ)
+		{
+			fprintf(yyout, "seq $a0, $a0, $t1\n");
+		}
+		else if(p->filhos[1]->tokenNumber == NEQ)
+		{
+			fprintf(yyout, "sne $a0, $a0, $t1\n");
+		}
+		else if(p->filhos[1]->tokenNumber == GTEQ)
+		{
+			fprintf(yyout, "sge $a0, $a0, $t1\n");
+		}
+		else if(p->filhos[1]->tokenNumber == GT)
+		{
+			fprintf(yyout, "sgt $a0, $a0, $t1\n");
+		}
+		else if(p->filhos[1]->tokenNumber == LTEQ)
+		{
+			fprintf(yyout, "sle $a0, $a0, $t1\n");
+		}
+		else if(p->filhos[1]->tokenNumber == LT)
+		{
+			fprintf(yyout, "slt $a0, $a0, $t1\n");
+		}
+		else if(p->filhos[1]->tokenNumber == AND)
+		{
+			fprintf(yyout, "and $a0, $a0, $t1\n");
+		}
+		else if(p->filhos[1]->tokenNumber == AND)
+		{
+			fprintf(yyout, "or $a0, $a0, $t1\n");
 		}
 	}
 	else if(p->filhos[0]->tokenNumber == NUMBER)
