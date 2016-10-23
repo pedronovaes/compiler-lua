@@ -8,14 +8,14 @@ typedef struct treeNode{
 } tipoTree;
 
 typedef struct listaV{
-	char *varName;
+	char varName[20];
 	int varValue;
 	struct listaV *prox;
 } listaVar;
 
 typedef struct listaF
 {
-	char *fname;
+	char fname[20];
 	int n_param;
 	struct listaF *prox;
 } listaFuncs;

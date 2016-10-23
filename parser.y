@@ -17,8 +17,14 @@ tipoTree * terminalToken(char id[20], int token_n);
 char * consultaToken(int token_n);
 void yyerror(char *string);
 
+int insereVar(listaVar **p, char *id, int value);
+listaVar * consultaVar(listaVar *p, char *id);
+int consultaFuncs(listaFuncs *p, char *id);
+int insereFunc(listaFuncs **p, char *id);
+
 tipoTree *treeRoot = NULL;
-localContext globalContext;
+listaVar *vars = NULL;
+listaFuncs *funcs = NULL;
 
 %}
 
@@ -67,20 +73,6 @@ programa: bloco {
 				if($1 != NULL){
 					$$ = cria_node("programa", 1, $1);
 					treeRoot = $$;
-//					fprintf(yyout,"[programa ");
-					// printTree(treeRoot);
-//					fprintf(yyout,"]");
-					//Inicializacao MIPS
-					fprintf(yyout, "\n.data\n");
-					fprintf(yyout, "_newline: .asciiz \"\\n\"\n");
-					fprintf(yyout,".text\n");
-					fprintf(yyout,".globl main\n\n");
-					fprintf(yyout,"main:\n");
-
-					geraCode(treeRoot);
-					fprintf(yyout, "\nli $v0, 10\n");
-					fprintf(yyout, "syscall");
-					fprintf(yyout,"\n");
 				}
 		};
 
@@ -107,14 +99,13 @@ comando	: SEMICOL { $$ = terminalToken(";", SEMICOL); }
 		| DO bloco END {$$ = cria_node("comando", 3, terminalToken("do", DO), terminalToken("end", END)); }
 		| WHILE exp DO bloco END {$$ = cria_node("comando", 5, terminalToken("while", WHILE), $2, terminalToken("do", DO), $4, terminalToken("end", END)); }
 		| FOR NAME ASSIGN exp COMMA exp otherexp DO bloco END {$$ = cria_node("comando", 10, terminalToken("for", FOR), terminalToken($2, NAME), terminalToken("=", ASSIGN), $4, terminalToken(",", COMMA), $6, $7, terminalToken("do", DO), $9, terminalToken("end", END) ); }
-		// | IF exp THEN bloco %prec END { $$ = cria_node("comando", 5, terminalToken("if", IF), $2, terminalToken("then", THEN), $4, terminalToken("end", END)); }
 		| IF exp THEN bloco elseif else END { $$ = cria_node("comando", 7, terminalToken("if", IF), $2, terminalToken("then", THEN), $4, $5, $6, terminalToken("end", END)); }
 		| FUNCTION NAME OPENPAR optionListanome CLOSEPAR bloco END {$$ = cria_node("comando", 7, terminalToken("function", FUNCTION), terminalToken($2, NAME), terminalToken("(", OPENPAR), $4, terminalToken(")", CLOSEPAR), $6, terminalToken("end", END)); }
 		| LOCAL listadenomes assignlistaexp { $$ = cria_node("comando", 3, terminalToken("local", LOCAL), $2, $3); }
 		;
 
 otherexp: { $$ = NULL; }
-		| COMMA exp { cria_node("listaexp", 2, terminalToken(",", COMMA), $2); }
+		| COMMA exp {$$ = cria_node("listaexp", 2, terminalToken(",", COMMA), $2); }
 		;
 
 elseif	: { $$ = NULL; }
@@ -181,7 +172,6 @@ exp		: NUMBER { $$ = terminalNumber($1); }
 		| MINUS exp  { $$ = cria_node("opunaria", 2, terminalToken("-", MINUS), $2); }
 		| OPENPAR exp CLOSEPAR { $$ = cria_node("exp", 3,terminalToken("(", OPENPAR), $2, terminalToken(")", CLOSEPAR)); }
 		;
-
 %%
 
 tipoTree * cria_node(char nonT[20], int n_filhos, ...){
@@ -329,6 +319,56 @@ char * consultaToken(int token_n){
 	}
 };
 
+int insereVar(listaVar **p, char *id, int value){
+
+	listaVar *aux = malloc(sizeof(struct listaV));
+	strcpy(aux->varName, id);
+	aux->varValue = value;
+	aux->prox = *p;
+	*p = aux;
+}
+
+listaVar * consultaVar(listaVar *p, char *id){
+	listaVar *aux;
+	for(aux = p; aux != NULL; aux = aux->prox){
+		if( strcmp(aux->varName,id) == 0){
+			return aux;
+		}
+	}
+	return NULL;
+}
+
+int consultaFuncs(listaFuncs *p, char *id){
+
+	listaFuncs *aux;
+	for(aux = p; aux != NULL; aux = aux->prox){
+		if( strcmp(aux->fname,id) == 0 ){
+			return 1;
+		}
+	}
+	return 0;
+}
+
+int insereFunc(listaFuncs **p, char *id){
+
+	listaFuncs *aux = malloc(sizeof(struct listaF));
+	strcpy(aux->fname, id);
+	aux->prox = *p;
+	*p = aux;
+
+}
+
+int updateVar(listaVar **p, char *id, int newValue){
+
+	listaVar *aux = consultaVar(*p, id);
+
+	if (aux != NULL)
+		aux->varValue = newValue;
+	else
+		return -1;
+	return 1;
+}
+
 void yyerror(char *string){  fprintf(stderr, "%s\n", string); }
 
 int printTree(tipoTree *p){
@@ -386,6 +426,7 @@ int geraCodeOpBin(tipoTree *p){
 	int i;
 	if (p == NULL)
 		return 0;
+
 	if( strcmp(p->nonTerminal,"opbin") == 0 ){
 
 		//resolve primeiro filho
@@ -399,15 +440,32 @@ int geraCodeOpBin(tipoTree *p){
 		else
 		{
 			//Primeiro fator espera um resultado
-			if ( strcmp(p->filhos[0]->nonTerminal, "exp") == 0 ){
-				geraCodeOpBin(p->filhos[0]->filhos[1]);
-				fprintf(yyout,"sw $a0, 0($sp)\n");
-				fprintf(yyout,"addiu $sp, $sp, -4\n");
+			if( p->filhos[0]->nonTerminal != NULL){
+				if ( strcmp(p->filhos[0]->nonTerminal, "exp") == 0 ){
+					geraCodeOpBin(p->filhos[0]->filhos[1]);
+					fprintf(yyout,"sw $a0, 0($sp)\n");
+					fprintf(yyout,"addiu $sp, $sp, -4\n");
+				}
 			}
-			else{
-				geraCodeOpBin(p->filhos[0]);
-				fprintf(yyout,"sw $a0, 0($sp)\n");
-				fprintf(yyout,"addiu $sp, $sp, -4\n");
+			else
+			{
+				if(p->filhos[0]->tokenNumber == NAME){
+					printf("achei a var %s\n", p->filhos[0]->id);
+					listaVar *aux = consultaVar(vars, p->filhos[0]->id);
+					if (aux == NULL)
+						printf("Erro : var nao encontrada!!!!\n");
+					else{
+						fprintf(yyout, "li $a0, %d\n", aux->varValue);
+						fprintf(yyout, "sw $a0, 0($sp)\n", aux->varValue);
+						fprintf(yyout,"addiu $sp, $sp, -4\n");
+					}
+				}
+				else{
+					// printf("entrei aqui dentro do %s\n", p->nonTerminal);
+					geraCodeOpBin(p->filhos[2]);
+					fprintf(yyout,"sw $a0, 0($sp)\n");
+					fprintf(yyout,"addiu $sp, $sp, -4\n");
+				}
 			}
 		}
 		if (p->filhos[2]->tokenNumber == NUMBER) {
@@ -419,18 +477,33 @@ int geraCodeOpBin(tipoTree *p){
 		}
 		else
 		{
-
-			if ( strcmp(p->filhos[2]->nonTerminal, "exp") == 0 ){
-				geraCodeOpBin(p->filhos[2]->filhos[1]);
-				fprintf(yyout,"sw $a0, 0($sp)\n");
-				fprintf(yyout,"addiu $sp, $sp, -4\n");
+			if( p->filhos[2]->nonTerminal != NULL){
+				if ( strcmp(p->filhos[2]->nonTerminal, "exp") == 0 ){
+					geraCodeOpBin(p->filhos[2]->filhos[1]);
+					fprintf(yyout,"sw $a0, 0($sp)\n");
+					fprintf(yyout,"addiu $sp, $sp, -4\n");
+				}
 			}
 			else
 			{
-				//Segundo fator espera um resultado
-				geraCodeOpBin(p->filhos[2]);
-				fprintf(yyout,"sw $a0, 0($sp)\n");
-				fprintf(yyout,"addiu $sp, $sp, -4\n");
+				if(p->filhos[2]->tokenNumber == NAME){
+					printf("achei a var %s\n", p->filhos[2]->id);
+					listaVar *aux = consultaVar(vars, p->filhos[2]->id);
+					if (aux == NULL)
+						printf("Erro : var nao encontrada!!!!\n");
+					else
+					{
+						fprintf(yyout, "li $a0, %d\n", aux->varValue);
+						fprintf(yyout, "sw $a0, 0($sp)\n", aux->varValue);
+						fprintf(yyout,"addiu $sp, $sp, -4\n");
+					}
+				}
+				else{
+					// printf("entrei aqui dentro do %s\n", p->nonTerminal);
+					geraCodeOpBin(p->filhos[2]);
+					fprintf(yyout,"sw $a0, 0($sp)\n");
+					fprintf(yyout,"addiu $sp, $sp, -4\n");
+				}
 			}
 		}
 		//Opera fatores
@@ -487,8 +560,18 @@ int geraCodeOpBin(tipoTree *p){
 	}
 	else if(p->filhos[0]->tokenNumber == NUMBER)
 	{
+		printf("achei o numero %d\n", p->filhos[0]->number);
 		fprintf(yyout, "li $a0, %d\n",p->filhos[0]->number);
 		return 0;
+	}
+	else if(p->filhos[0]->tokenNumber == NAME){
+
+		printf("achei a var %s\n", p->filhos[0]->id);
+		listaVar *aux = consultaVar(vars, p->filhos[0]->id);
+		if (aux == NULL)
+			printf("Erro : var nao encontrada!!!!\n");
+		else
+		fprintf(yyout, "li $a0, %d\n", aux->varValue);
 	}
 	else
 	{
@@ -497,6 +580,46 @@ int geraCodeOpBin(tipoTree *p){
 			if (p->filhos[i] != NULL) {
 				geraCodeOpBin(p->filhos[i]);
 			}
+	}
+}
+
+int trataVars(tipoTree *p){
+
+	if(p == NULL)
+		return 0;
+	if(p->num_filhos == 0)
+	{
+		if ((p->tokenNumber == NAME) && (consultaVar(vars, p->id) == NULL) && !(consultaFuncs(funcs,p->id))){
+			insereVar(&vars, p->id, -7);
+		}
+	}
+	else
+	{
+		int i;
+		for(i = 0; i < p->num_filhos; i++)
+			trataVars(p->filhos[i]);
+	}
+}
+
+int trataFuncs(tipoTree *p){
+
+	if(p == NULL)
+		return 0;
+
+	if( strcmp(p->nonTerminal,"comando") == 0){
+		if(p->filhos[0]->id != NULL)
+		{
+			if( strcmp(p->filhos[0]->id, "function")){
+				if(!consultaFuncs(funcs, p->filhos[1]->id))
+					insereFunc(&funcs, p->filhos[1]->id);
+			}
+		}
+	}
+	else
+	{
+		int i;
+		for(i = 0; i < p->num_filhos; i++)
+			trataFuncs(p->filhos[i]);
 	}
 }
 
@@ -521,15 +644,18 @@ int geraCode(tipoTree *p){
 	}
 
 	if( strcmp(p->nonTerminal, "listaexp") == 0 ){
+
 		printf("entrei na listaexp\n");
 		geraCodeOpBin(p);
 		printf("sai de listaexp\n");
 		return 0;
 	}
+	
 
 	if(p->filhos[0]->nonTerminal != NULL)
 	{
 		for(i = 0; i < p->num_filhos; i++){
+			if(p->filhos[i]->nonTerminal != NULL)
 				geraCode(p->filhos[i]);
 		}
 	}
@@ -545,6 +671,25 @@ int main(int argc, char** argv){
 	else{
 		yyparse();
 	}
+
+	//Inicialiazao de ambiente
+	// printTree(treeRoot);
+	insereFunc(&funcs, "print");
+	trataFuncs(treeRoot);
+	trataVars(treeRoot);
+
+	//Inicializacao MIPS
+	fprintf(yyout, "\n.data\n");
+	fprintf(yyout, "_newline: .asciiz \"\\n\"\n");
+	fprintf(yyout,".text\n");
+	fprintf(yyout,".globl main\n\n");
+	fprintf(yyout,"main:\n");
+	geraCode(treeRoot);
+
+	fprintf(yyout, "\nli $v0, 10\n");
+	fprintf(yyout, "syscall");
+	fprintf(yyout,"\n");
+
 	fclose(yyin);
 	fclose(yyout);
 }
