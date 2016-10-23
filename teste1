@@ -1,1 +1,1 @@
-print(3 > 3 or 1 > 1);
+while a == 0 do print(1) a = 1 end

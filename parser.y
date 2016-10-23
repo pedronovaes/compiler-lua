@@ -7,6 +7,9 @@
 
 #define YYDEBUG 1
 
+int cont_while = 0;
+int cont_for = 0;
+
 extern FILE *yyin;
 extern FILE *yyout;
 
@@ -68,7 +71,7 @@ programa: bloco {
 					$$ = cria_node("programa", 1, $1);
 					treeRoot = $$;
 //					fprintf(yyout,"[programa ");
-					// printTree(treeRoot);
+					printTree(treeRoot);
 //					fprintf(yyout,"]");
 					//Inicializacao MIPS
 					fprintf(yyout, "\n.data\n");
@@ -77,7 +80,7 @@ programa: bloco {
 					fprintf(yyout,".globl main\n\n");
 					fprintf(yyout,"main:\n");
 
-					geraCode(treeRoot);
+					// geraCode(treeRoot);
 					fprintf(yyout, "\nli $v0, 10\n");
 					fprintf(yyout, "syscall");
 					fprintf(yyout,"\n");
@@ -525,6 +528,25 @@ int geraCode(tipoTree *p){
 		geraCodeOpBin(p);
 		printf("sai de listaexp\n");
 		return 0;
+	}
+
+	// gerando codigo para instrucao while
+	if( strcmp(p->nonTerminal, "comando") == 0)
+	{
+		if (p->filhos[0]->id != NULL) {
+
+			// gerando codigo para instrucao while
+			if (strcmp(p->filhos[0]->id, "while") == 0) {
+				cont_while++;
+				fprintf(yyout, "true_bw%d:\n", cont_while);
+				geraCodeOpBin(p->filhos[1]);
+				fprintf(yyout, "li $t1, 0\n");
+				fprintf(yyout, "beq $a0, $t1, false_bw%d\n", cont_while);
+				geraCode(p->filhos[3]);
+				fprintf(yyout, "j true_bw%d\n", cont_while);
+				fprintf(yyout, "false_bw%d:\n", cont_while);
+			}
+		}
 	}
 
 	if(p->filhos[0]->nonTerminal != NULL)
