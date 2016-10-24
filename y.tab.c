@@ -2184,7 +2184,6 @@ int insereFunc(listaFuncs **p, char *id){
 	strcpy(aux->fname, id);
 	aux->prox = *p;
 	*p = aux;
-
 }
 
 int updateVar(listaVar *p, char *id, int newValue){
@@ -2230,12 +2229,14 @@ int geraCodeOpBin(tipoTree *p){
 	int i,x,y;
 	if (p == NULL)
 		return 0;
+	if (p->nonTerminal == NULL)
+		return 0;
 
 	printf("cheguei em %s\n", p->nonTerminal);
 	if( strcmp(p->nonTerminal,"opbin") == 0 ){
 
 		//resolve primeiro filho
-		if (p->filhos[0]->tokenNumber == NUMBER) {
+		if (p->filhos[0]->tokenNumber == NUMBER){
 
 			//Primeiro fator eh um numero
 			fprintf(yyout,"li $a0, %d\n", p->filhos[0]->number);
@@ -2296,7 +2297,8 @@ int geraCodeOpBin(tipoTree *p){
 					geraCodeOpBin(p->filhos[2]->filhos[1]);
 				}
 				else{
-					geraCodeOpBin(p->filhos[2]->filhos[1]);
+					printf("gerei aqui\n");
+					geraCodeOpBin(p->filhos[2]);
 				}
 				fprintf(yyout,"sw $a0, 0($sp)\n");
 				fprintf(yyout,"addiu $sp, $sp, -4\n");
@@ -2406,6 +2408,7 @@ int geraCodeOpBin(tipoTree *p){
 	}
 	else
 	{
+
 		for(i = 0; i < p->num_filhos; i++){
 			if (p->filhos[i] != NULL) {
 				geraCodeOpBin(p->filhos[i]);
