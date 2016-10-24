@@ -442,7 +442,7 @@ int geraCodeOpBin(tipoTree *p){
 					if (aux == NULL)
 						printf("Erro : var nao encontrada!!!!\n");
 					else{
-						fprintf(yyout, "li $a0, %d\n", aux->varValue);
+						fprintf(yyout, "l2 $a0, %s\n", aux->filhos[0]->id);
 						fprintf(yyout, "sw $a0, 0($sp)\n");
 						fprintf(yyout,"addiu $sp, $sp, -4\n");
 					}
@@ -489,7 +489,7 @@ int geraCodeOpBin(tipoTree *p){
 						printf("Erro : var nao encontrada!!!!\n");
 					else
 					{
-						fprintf(yyout, "li $a0, %d\n", aux->varValue);
+						fprintf(yyout, "lw $a0, %s\n", p->filhos[2]->id);
 						fprintf(yyout, "sw $a0, 0($sp)\n");
 						fprintf(yyout,"addiu $sp, $sp, -4\n");
 					}
