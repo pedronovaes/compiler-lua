@@ -696,6 +696,46 @@ int geraCode(tipoTree *p){
 				fprintf(yyout, "j true_bw%d\n", cont_while);
 				fprintf(yyout, "false_bw%d:\n", cont_while);
 			}
+
+			// gerando codigo para instrucao for
+			// $t0 vai guardar a condicao inicial
+			// $t2 vai guardar ate onde o loop deve ir
+			// $t1 vai guardar o quanto deve incrementar por cada passada no for (se existir essa informacao)
+			if (strcmp(p->filhos[0]->id, "for") == 0) {
+				printf("entrei aqui\n");
+				int tem_ramificacao = 0;
+				cont_for++;
+				geraCodeOpBin(p->filhos[3]);
+				fprintf(yyout, "move $t0, $a0\n");
+				printf("jeba\n");
+				geraCodeOpBin(p->filhos[5]);
+				fprintf(yyout, "move $t2, $a0\n");
+				if (p->filhos[6] != NULL) {
+					tem_ramificacao = 1;
+					geraCodeOpBin(p->filhos[6]);
+					fprintf(yyout, "move $t1, $a0\n");
+				}
+
+				if (tem_ramificacao == 1) {
+					fprintf(yyout, "true_bf%d:\n", cont_for);
+					geraCode(p->filhos[8]);
+					fprintf(yyout, "beq $t0, $t2, false_bf%d\n", cont_for);
+					fprintf(yyout, "add $t0, $t0, $t1\n");
+					fprintf(yyout, "j true_bf%d\n", cont_for);
+
+					fprintf(yyout, "false_bf%d:\n", cont_for);
+				}
+				else {
+					fprintf(yyout, "true_bf%d:\n", cont_for);
+					geraCode(p->filhos[8]);
+					fprintf(yyout, "beq $t0, $t2, false_bf%d\n", cont_for);
+					fprintf(yyout, "addiu $t1, 0\n");
+					fprintf(yyout, "add $t0, $t0, $t1\n");
+					fprintf(yyout, "j true_bf%d\n", cont_for);
+
+					fprintf(yyout, "false_bf%d:\n", cont_for);
+				}
+			}
 			return 0;
 		}
 
