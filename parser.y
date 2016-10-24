@@ -400,31 +400,6 @@ int printTree(tipoTree *p){
 	fprintf(yyout,"]");
 }
 
-int printTreeNew(tipoTree *p){
-
-	if(p == NULL)
-		return 0;
-	if(p->nonTerminal != NULL && p->num_filhos != 1){
-		fprintf(yyout,"[%s ", p->nonTerminal);
-	}
-	else if (p->num_filhos != 1)
-		fprintf(yyout, "[");
-	if(p->num_filhos == 0)
-	{
-		if (p->tokenNumber == NUMBER)
-			fprintf(yyout, "%s %d", consultaToken(p->tokenNumber), p->number);
-		else
-			fprintf(yyout, "%s %s", consultaToken(p->tokenNumber), p->id);
-	}
-	else
-	{
-		int i;
-		for(i = 0; i < p->num_filhos; i++)
-			printTree(p->filhos[i]);
-	}
-	if (p->num_filhos != 1)
-		fprintf(yyout,"]");
-}
 
 int geraCodeOpBin(tipoTree *p){
 
@@ -493,6 +468,7 @@ int geraCodeOpBin(tipoTree *p){
 		{
 			if( p->filhos[2]->nonTerminal != NULL){
 				if ( strcmp(p->filhos[2]->nonTerminal, "exp") == 0 ){
+					printf("entrou em exp\n");
 					geraCodeOpBin(p->filhos[2]->filhos[1]);
 				}
 				else{
@@ -768,11 +744,6 @@ int main(int argc, char** argv){
 	trataFuncs(treeRoot);
 	trataVars(treeRoot);
 
-	listaVar *a1;
-	for(a1 = vars; a1 != NULL; a1 = a1->prox)
-		printf("%s %d", a1->varName, a1->varValue);
-	printf("\n");
-
 	//Inicializacao MIPS
 	fprintf(yyout, "\n.data\n");
 	fprintf(yyout, "_newline: .asciiz \"\\n\"\n");
@@ -787,4 +758,6 @@ int main(int argc, char** argv){
 
 	fclose(yyin);
 	fclose(yyout);
+
+	return 0;
 }
