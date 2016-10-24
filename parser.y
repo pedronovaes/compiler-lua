@@ -578,7 +578,7 @@ int geraCodeOpBin(tipoTree *p){
 		if (aux == NULL)
 			printf("Erro : var nao encontrada!!!!\n");
 		else
-		fprintf(yyout, "li $a0, %s\n", p->filhos[0]->id);
+		fprintf(yyout, "lw $a0, %s\n", p->filhos[0]->id);
 
 		G_ACC = aux->varValue;
 	}
