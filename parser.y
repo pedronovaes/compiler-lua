@@ -601,7 +601,8 @@ int trataVars(tipoTree *p){
 	if(p->num_filhos == 0)
 	{
 		if ((p->tokenNumber == NAME) && (consultaVar(vars, p->id) == NULL) && !(consultaFuncs(funcs,p->id))){
-			insereVar(&vars, p->id, -7);
+			insereVar(&vars, p->id, 0);
+			fprintf(yyout, "%s: .word 0\n");
 		}
 	}
 	else
@@ -754,6 +755,8 @@ int geraCode(tipoTree *p){
 				printf("%s\n", p->filhos[0]->filhos[0]->id);
 				aux = consultaVar(vars, p->filhos[0]->filhos[0]->id);
 				aux->varValue = new_value;
+				fprintf(yyout, "li $a0, %d\n", new_value);
+				fprintf(yyout, "sw $a0, %s\n", p->id);
 				printf("sai do assign\n");
 			}
 			return 0;
@@ -785,10 +788,11 @@ int main(int argc, char** argv){
 	// printTree(treeRoot);
 	insereFunc(&funcs, "print");
 	trataFuncs(treeRoot);
-	trataVars(treeRoot);
 
 	//Inicializacao MIPS
 	fprintf(yyout, "\n.data\n");
+	trataVars(treeRoot);
+	fprintf(yyout, "\n");
 	fprintf(yyout, "_newline: .asciiz \"\\n\"\n");
 	fprintf(yyout,".text\n");
 	fprintf(yyout,".globl main\n\n");
