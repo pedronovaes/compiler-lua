@@ -7,6 +7,9 @@
 
 #define YYDEBUG 1
 
+int cont_while = 0;
+int cont_for = 0;
+
 extern FILE *yyin;
 extern FILE *yyout;
 
@@ -702,8 +705,23 @@ int geraCode(tipoTree *p){
 		printf("sai de listaexp\n");
 		return 0;
 	}
-
 	if( strcmp(p->nonTerminal, "comando") == 0){
+
+		if (p->filhos[0]->id != NULL) {
+
+			// gerando codigo para instrucao while
+			if (strcmp(p->filhos[0]->id, "while") == 0) {
+				cont_while++;
+				fprintf(yyout, "true_bw%d:\n", cont_while);
+				geraCodeOpBin(p->filhos[1]);
+				fprintf(yyout, "li $t1, 0\n");
+				fprintf(yyout, "beq $a0, $t1, false_bw%d\n", cont_while);
+				geraCode(p->filhos[3]);
+				fprintf(yyout, "j true_bw%d\n", cont_while);
+				fprintf(yyout, "false_bw%d:\n", cont_while);
+			}
+			return 0;
+		}
 
 		if(p->num_filhos == 3)
 		{
@@ -721,9 +739,7 @@ int geraCode(tipoTree *p){
 			}
 			return 0;
 		}
-
 	}
-
 	if(p->filhos[0]->nonTerminal != NULL)
 	{
 		for(i = 0; i < p->num_filhos; i++){
