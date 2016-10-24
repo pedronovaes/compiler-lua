@@ -9,6 +9,7 @@
 
 int cont_while = 0;
 int cont_for = 0;
+int cont_if = 0;
 
 extern FILE *yyin;
 extern FILE *yyout;
@@ -699,6 +700,23 @@ int geraCode(tipoTree *p){
 				geraCode(p->filhos[3]);
 				fprintf(yyout, "j true_bw%d\n", cont_while);
 				fprintf(yyout, "false_bw%d:\n", cont_while);
+			}
+
+			// gerando codigo para instrucao if [else]
+			if (strcmp(p->filhos[0]->id, "if") == 0) {
+				cont_if++;
+				geraCodeOpBin(p->filhos[1]);
+				fprintf(yyout, "li $t1, 0\n");
+				fprintf(yyout, "beq $a0, $t1, false_bi%d\n", cont_if);
+				geraCode(p->filhos[3]);
+				fprintf(yyout, "j exit_if%d\n", cont_if);
+
+				fprintf(yyout, "false_bi%d:\n", cont_if);
+				if (p->filhos[5] != NULL) {
+					// possui comando else no codigo
+					geraCode(p->filhos[5]->filhos[1]);
+				}
+				fprintf(yyout, "exit_if%d:\n", cont_if);
 			}
 
 			// gerando codigo para instrucao for
