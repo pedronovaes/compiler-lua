@@ -1,6 +1,3 @@
-a = 1
-print(a)
-b = 123
-print(b)
-a = a+b
-print(a)
+b = 4
+a = 4
+while (b > 1) do print(a) b = a - 1 end
