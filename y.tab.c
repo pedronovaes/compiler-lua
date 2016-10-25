@@ -2407,6 +2407,25 @@ int geraCodeOpBin(tipoTree *p){
 
 		G_ACC = aux->varValue;
 	}
+	else if( strcmp(p->nonTerminal,"opunaria") == 0 ){
+
+		if(p->filhos[0]->tokenNumber == MINUS){
+			geraCodeOpBin(p->filhos[1]);
+			fprintf(yyout, "li $t1 -1\n");
+			fprintf(yyout,"mult $a0, $t1\n");
+			fprintf(yyout,"mflo $a0\n");
+		}
+		else
+		{
+			geraCodeOpBin(p->filhos[1]);
+			if(G_ACC == 1)
+				fprintf(yyout, "li $a0, 0\n");
+			else //if (G_ACC == 0)
+				fprintf(yyout, "li $a0, 1\n");
+		}
+
+		return 0;
+	}
 	else
 	{
 
@@ -2503,6 +2522,24 @@ int geraCode(tipoTree *p){
 			fprintf(yyout, "la $a0, _newline\n");
 			fprintf(yyout, "syscall\n");
 		}
+		// gerando codigo para chamada de funcao
+		else {
+			char nome[30];
+			strcpy(nome, p->filhos[0]->id);
+			strcat(nome, "_entry");
+
+			fprintf(yyout, "sw $fp, 0($sp)\n");
+			fprintf(yyout, "addiu $sp, $sp, -4\n");
+
+			// a funcao possui parametros
+			if (p->filhos[2] != NULL) {
+				/* code */
+			}
+			else {
+
+				fprintf(yyout, "jal %s\n", nome);
+			}
+		}
 		return 0;
 	}
 
@@ -2544,6 +2581,51 @@ int geraCode(tipoTree *p){
 					geraCode(p->filhos[5]->filhos[1]);
 				}
 				fprintf(yyout, "exit_if%d:\n", cont_if);
+			}
+
+			// gerando codigo para instrucao for
+			// t0 armazena ate onde o for deve ir
+			if (strcmp(p->filhos[0]->id, "for") == 0) {
+				cont_for++;
+				geraCodeOpBin(p->filhos[3]);
+				printf("%d\n", G_ACC);
+				fprintf(yyout, "sw $a0, %s\n", p->filhos[1]->id);
+				geraCodeOpBin(p->filhos[5]);
+				printf("%s\n", p->filhos[5]->id);
+				printf("%d\n", G_ACC);
+				fprintf(yyout, "move $a0, $t0\n");
+				// pegar terceiro parametro, se tiver
+
+				fprintf(yyout, "true_bf%d:\n", cont_for);
+				fprintf(yyout, "lw $a0, %s\n", p->filhos[1]->id);
+				fprintf(yyout, "ble $a0, $t0, false_bf%d\n", cont_for);
+				geraCode(p->filhos[8]);
+				fprintf(yyout, "lw $a0, %s\n", p->filhos[1]->id);
+				fprintf(yyout, "li $t1, 1\n");
+				fprintf(yyout, "add $a0, $a0, $t1\n");
+				fprintf(yyout, "sw $a0, %s\n", p->filhos[1]->id);
+				fprintf(yyout, "j true_bf%d\n", cont_for);
+
+				fprintf(yyout, "false_bf%d:\n", cont_for);
+
+			}
+
+			// gerando codigo para definicao de funcao
+			if (strcmp(p->filhos[0]->id, "function") == 0) {
+				char nome2[30];
+				strcpy(nome2, p->filhos[1]->id);
+				strcat(nome2, "_entry");
+				fprintf(yyout, "%s:\n", nome2);
+				fprintf(yyout, "move $fp, $sp\n");
+				fprintf(yyout, "sw $ra, 0($sp)\n");
+				fprintf(yyout, "addiu $sp, $sp, -4\n");
+				geraCode(p->filhos[5]);
+				fprintf(yyout, "lw $ra, 4($sp)\n");
+				// tem que fazer uma busca pelo nome da funcao para saber a quantidade de parametros
+				// z = quantidade de parametros da funcao
+				// fprintf(yyout, "addiu $sp, $sp, %d\n", z);
+				fprintf(yyout, "lw $fp, 0($sp)\n");
+				fprintf(yyout, "jr $ra\n");
 			}
 
 			return 0;
@@ -2603,7 +2685,9 @@ int main(int argc, char** argv){
 	fprintf(yyout,".text\n");
 	fprintf(yyout,".globl main\n\n");
 	fprintf(yyout,"main:\n");
+
 	geraCode(treeRoot);
+
 	fprintf(yyout, "li $v0, 4\n");
 	fprintf(yyout, "la $a0, _newline\n");
 	fprintf(yyout, "syscall\n");
