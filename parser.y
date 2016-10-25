@@ -797,12 +797,12 @@ int geraCode(tipoTree *p){
 				else
 					nameOrNumber(p->filhos[5]);
 				printf("%d\n", G_ACC);
-				fprintf(yyout, "move $a0, $t0\n");
+				fprintf(yyout, "move $t0, $a0\n");
 				// pegar terceiro parametro, se tiver
 
 				fprintf(yyout, "true_bf%d:\n", cont_for);
 				fprintf(yyout, "lw $a0, %s\n", p->filhos[1]->id);
-				fprintf(yyout, "ble $a0, $t0, false_bf%d\n", cont_for);
+				fprintf(yyout, "bgt $a0, $t0, false_bf%d\n", cont_for);
 				geraCode(p->filhos[8]);
 				fprintf(yyout, "lw $a0, %s\n", p->filhos[1]->id);
 				fprintf(yyout, "li $t1, 1\n");

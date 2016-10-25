@@ -12,10 +12,10 @@ sw $a0, i
 li $a0, 0
 sw $a0, i
 li $a0, 10
-move $a0, $t0
+move $t0, $a0
 true_bf1:
 lw $a0, i
-ble $a0, $t0, false_bf1
+bgt $a0, $t0, false_bf1
 lw $a0, i
 li $v0, 1
 syscall
