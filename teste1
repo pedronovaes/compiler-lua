@@ -1,4 +1,0 @@
-a = 1
-c = 2
-d = 3
-if (a > (c + d)) then print(c + d + 1) else print(24) end

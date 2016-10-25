@@ -366,7 +366,7 @@ int insereFunc(listaFuncs **p, char *id){
 int updateVar(listaVar *p, char *id, int newValue){
 
 	listaVar *aux = consultaVar(p, id);
-	printf("foi?\n");
+	// printf("foi?\n");
 	if (aux != NULL)
 		aux->varValue = newValue;
 	else
@@ -409,7 +409,7 @@ int geraCodeOpBin(tipoTree *p){
 	if (p->nonTerminal == NULL)
 		return 0;
 
-	printf("cheguei em %s\n", p->nonTerminal);
+	// printf("cheguei em %s\n", p->nonTerminal);
 	if( strcmp(p->nonTerminal,"opbin") == 0 ){
 
 		//resolve primeiro filho
@@ -438,7 +438,7 @@ int geraCodeOpBin(tipoTree *p){
 			else
 			{
 				if(p->filhos[0]->tokenNumber == NAME){
-					printf("achei a var %s\n", p->filhos[0]->id);
+					// printf("achei a var %s\n", p->filhos[0]->id);
 					listaVar *aux = consultaVar(vars, p->filhos[0]->id);
 					if (aux == NULL)
 						printf("Erro : var nao encontrada!!!!\n");
@@ -459,7 +459,7 @@ int geraCodeOpBin(tipoTree *p){
 			}
 		}
 		if (p->filhos[2]->tokenNumber == NUMBER) {
-			printf("cheguei aqui tbm hein\n");
+			// printf("cheguei aqui tbm hein\n");
 			//Segundo fator eh um numero
 			fprintf(yyout,"li $a0, %d\n", p->filhos[2]->number);
 			fprintf(yyout,"sw $a0, 0($sp)\n");
@@ -470,11 +470,11 @@ int geraCodeOpBin(tipoTree *p){
 		{
 			if( p->filhos[2]->nonTerminal != NULL){
 				if ( strcmp(p->filhos[2]->nonTerminal, "exp") == 0 ){
-					printf("entrou em exp\n");
+					// printf("entrou em exp\n");
 					geraCodeOpBin(p->filhos[2]->filhos[1]);
 				}
 				else{
-					printf("gerei aqui\n");
+					// printf("gerei aqui\n");
 					geraCodeOpBin(p->filhos[2]);
 				}
 				fprintf(yyout,"sw $a0, 0($sp)\n");
@@ -484,7 +484,7 @@ int geraCodeOpBin(tipoTree *p){
 			else
 			{
 				if(p->filhos[2]->tokenNumber == NAME){
-					printf("achei a var %s\n", p->filhos[2]->id);
+					// printf("achei a var %s\n", p->filhos[2]->id);
 					listaVar *aux = consultaVar(vars, p->filhos[2]->id);
 					if (aux == NULL)
 						printf("Erro : var nao encontrada!!!!\n");
@@ -553,7 +553,7 @@ int geraCodeOpBin(tipoTree *p){
 		}
 		else if(p->filhos[1]->tokenNumber == LT)
 		{
-			printf("ta saindo da jaula\n");
+			// printf("ta saindo da jaula\n");
 			fprintf(yyout, "slt $a0, $a0, $t1\n");
 		}
 		else if(p->filhos[1]->tokenNumber == AND)
@@ -567,14 +567,14 @@ int geraCodeOpBin(tipoTree *p){
 	}
 	else if(p->filhos[0]->tokenNumber == NUMBER)
 	{
-		printf("achei o numero %d\n", p->filhos[0]->number);
+		// printf("achei o numero %d\n", p->filhos[0]->number);
 		fprintf(yyout, "li $a0, %d\n",p->filhos[0]->number);
 		G_ACC = p->filhos[0]->number;
 		return 0;
 	}
 	else if(p->filhos[0]->tokenNumber == NAME){
 
-		printf("achei a var %s\n", p->filhos[0]->id);
+		// printf("achei a var %s\n", p->filhos[0]->id);
 		listaVar *aux = consultaVar(vars, p->filhos[0]->id);
 		if (aux == NULL)
 			printf("Erro : var nao encontrada!!!!\n");
@@ -603,7 +603,7 @@ int trataVars(tipoTree *p){
 	{
 		if ((p->tokenNumber == NAME) && (consultaVar(vars, p->id) == NULL) && !(consultaFuncs(funcs,p->id))){
 			insereVar(&vars, p->id, 0);
-			fprintf(yyout, "%s: .word 0\n");
+			fprintf(yyout, "%s: .word 0\n", p->id);
 		}
 	}
 	else
@@ -665,15 +665,18 @@ int geraCode(tipoTree *p){
 	if(p->nonTerminal == NULL)
 		return 0;
 
-	printf("entrei em %s\n", p->nonTerminal);
+	// printf("entrei em %s\n", p->nonTerminal);
 
 	if( strcmp(p->nonTerminal, "chamadadefuncao") == 0 )
 	{
 		if( strcmp(p->filhos[0]->id, "print") == 0){
-			printf("entrei no print\n");
+			// printf("entrei no print\n");
 			geraCode(p->filhos[2]);
-			printf("saiu print\n");
+			// printf("saiu print\n");
 			fprintf(yyout, "li $v0, 1\n");
+			fprintf(yyout, "syscall\n");
+			fprintf(yyout, "li $v0, 4\n");
+			fprintf(yyout, "la $a0, _newline\n");
 			fprintf(yyout, "syscall\n");
 		}
 		return 0;
@@ -681,9 +684,9 @@ int geraCode(tipoTree *p){
 
 	if( strcmp(p->nonTerminal, "listaexp") == 0 ){
 
-		printf("entrei na listaexp\n");
+		// printf("entrei na listaexp\n");
 		geraCodeOpBin(p);
-		printf("sai de listaexp\n");
+		// printf("sai de listaexp\n");
 		return 0;
 	}
 	if( strcmp(p->nonTerminal, "comando") == 0){
@@ -719,45 +722,6 @@ int geraCode(tipoTree *p){
 				fprintf(yyout, "exit_if%d:\n", cont_if);
 			}
 
-			// gerando codigo para instrucao for
-			// $t0 vai guardar a condicao inicial
-			// $t2 vai guardar ate onde o loop deve ir
-			// $t1 vai guardar o quanto deve incrementar por cada passada no for (se existir essa informacao)
-			if (strcmp(p->filhos[0]->id, "for") == 0) {
-				printf("entrei aqui\n");
-				int tem_ramificacao = 0;
-				cont_for++;
-				geraCodeOpBin(p->filhos[3]);
-				fprintf(yyout, "move $t0, $a0\n");
-				printf("jeba\n");
-				geraCodeOpBin(p->filhos[5]);
-				fprintf(yyout, "move $t2, $a0\n");
-				if (p->filhos[6] != NULL) {
-					tem_ramificacao = 1;
-					geraCodeOpBin(p->filhos[6]);
-					fprintf(yyout, "move $t1, $a0\n");
-				}
-
-				if (tem_ramificacao == 1) {
-					fprintf(yyout, "true_bf%d:\n", cont_for);
-					geraCode(p->filhos[8]);
-					fprintf(yyout, "beq $t0, $t2, false_bf%d\n", cont_for);
-					fprintf(yyout, "add $t0, $t0, $t1\n");
-					fprintf(yyout, "j true_bf%d\n", cont_for);
-
-					fprintf(yyout, "false_bf%d:\n", cont_for);
-				}
-				else {
-					fprintf(yyout, "true_bf%d:\n", cont_for);
-					geraCode(p->filhos[8]);
-					fprintf(yyout, "beq $t0, $t2, false_bf%d\n", cont_for);
-					fprintf(yyout, "addiu $t1, 0\n");
-					fprintf(yyout, "add $t0, $t0, $t1\n");
-					fprintf(yyout, "j true_bf%d\n", cont_for);
-
-					fprintf(yyout, "false_bf%d:\n", cont_for);
-				}
-			}
 			return 0;
 		}
 
@@ -765,17 +729,17 @@ int geraCode(tipoTree *p){
 		{
 			if(p->filhos[1]->tokenNumber == ASSIGN)
 			{
-				printf("entrei no assign\n");
+				// printf("entrei no assign\n");
 				geraCodeOpBin(p->filhos[2]);
 				listaVar *aux;
 				int new_value = G_ACC;
-				printf("saiu com valor: %d\n", new_value);
-				printf("%s\n", p->filhos[0]->filhos[0]->id);
+				// printf("saiu com valor: %d\n", new_value);
+				// printf("%s\n", p->filhos[0]->filhos[0]->id);
 				aux = consultaVar(vars, p->filhos[0]->filhos[0]->id);
 				aux->varValue = new_value;
 				// fprintf(yyout, "li $a0, %d\n", new_value);
 				fprintf(yyout, "sw $a0, %s\n", p->filhos[0]->filhos[0]->id);
-				printf("sai do assign\n");
+				// printf("sai do assign\n");
 			}
 			return 0;
 		}
@@ -784,12 +748,12 @@ int geraCode(tipoTree *p){
 	{
 		for(i = 0; i < p->num_filhos; i++){
 			if(p->filhos[i] != NULL){
-				printf("%d %s\n", i, p->nonTerminal);
+				// printf("%d %s\n", i, p->nonTerminal);
 				geraCode(p->filhos[i]);
 			}
 		}
 	}
-	printf("terminei os filhos de %s\n", p->nonTerminal);
+	// printf("terminei os filhos de %s\n", p->nonTerminal);
 }
 
 int main(int argc, char** argv){
@@ -816,6 +780,9 @@ int main(int argc, char** argv){
 	fprintf(yyout,".globl main\n\n");
 	fprintf(yyout,"main:\n");
 	geraCode(treeRoot);
+	fprintf(yyout, "li $v0, 4\n");
+	fprintf(yyout, "la $a0, _newline\n");
+	fprintf(yyout, "syscall\n");
 
 	fprintf(yyout, "\nli $v0, 10\n");
 	fprintf(yyout, "syscall");
