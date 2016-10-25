@@ -2607,8 +2607,9 @@ int geraCode(tipoTree *p){
 
 			// gerando codigo para instrucao for
 			// t0 armazena ate onde o for deve ir
+			// t2 armazena o incremento do for (quando existir)
 			if (strcmp(p->filhos[0]->id, "for") == 0) {
-				
+
 				cont_for++;
 				if(p->filhos[5]->nonTerminal != NULL)
 					geraCodeOpBin(p->filhos[3]);
@@ -2622,19 +2623,43 @@ int geraCode(tipoTree *p){
 					nameOrNumber(p->filhos[5]);
 				printf("%d\n", G_ACC);
 				fprintf(yyout, "move $t0, $a0\n");
+
 				// pegar terceiro parametro, se tiver
+				if (p->filhos[6] != NULL) {
+					if (p->filhos[6]->filhos[1]->nonTerminal != NULL) {
+						geraCodeOpBin(p->filhos[6]->filhos[1]);
+					}
+					else
+						nameOrNumber(p->filhos[6]->filhos[1]);
+					printf("jeba%d\n", G_ACC);
+					fprintf(yyout, "move $t2, $a0\n");
 
-				fprintf(yyout, "true_bf%d:\n", cont_for);
-				fprintf(yyout, "lw $a0, %s\n", p->filhos[1]->id);
-				fprintf(yyout, "bgt $a0, $t0, false_bf%d\n", cont_for);
-				geraCode(p->filhos[8]);
-				fprintf(yyout, "lw $a0, %s\n", p->filhos[1]->id);
-				fprintf(yyout, "li $t1, 1\n");
-				fprintf(yyout, "add $a0, $a0, $t1\n");
-				fprintf(yyout, "sw $a0, %s\n", p->filhos[1]->id);
-				fprintf(yyout, "j true_bf%d\n", cont_for);
+					fprintf(yyout, "true_bf%d:\n", cont_for);
+					fprintf(yyout, "lw $a0, %s\n", p->filhos[1]->id);
+					fprintf(yyout, "bgt $a0, $t0, false_bf%d\n", cont_for);
+					geraCode(p->filhos[8]);
+					fprintf(yyout, "lw $a0, %s\n", p->filhos[1]->id);
+					//fprintf(yyout, "move $t1, $t2\n");
+					fprintf(yyout, "add $a0, $a0, $t2\n");
+					fprintf(yyout, "sw $a0, %s\n", p->filhos[1]->id);
+					fprintf(yyout, "j true_bf%d\n", cont_for);
 
-				fprintf(yyout, "false_bf%d:\n", cont_for);
+					fprintf(yyout, "false_bf%d:\n", cont_for);
+				}
+				else {
+
+					fprintf(yyout, "true_bf%d:\n", cont_for);
+					fprintf(yyout, "lw $a0, %s\n", p->filhos[1]->id);
+					fprintf(yyout, "bgt $a0, $t0, false_bf%d\n", cont_for);
+					geraCode(p->filhos[8]);
+					fprintf(yyout, "lw $a0, %s\n", p->filhos[1]->id);
+					fprintf(yyout, "li $t1, 1\n");
+					fprintf(yyout, "add $a0, $a0, $t1\n");
+					fprintf(yyout, "sw $a0, %s\n", p->filhos[1]->id);
+					fprintf(yyout, "j true_bf%d\n", cont_for);
+
+					fprintf(yyout, "false_bf%d:\n", cont_for);
+				}
 
 			}
 
