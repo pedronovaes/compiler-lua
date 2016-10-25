@@ -2230,10 +2230,11 @@ int geraCodeOpBin(tipoTree *p){
 	int i,x,y;
 	if (p == NULL)
 		return 0;
+
 	if (p->nonTerminal == NULL)
 		return 0;
 
-	// printf("cheguei em %s\n", p->nonTerminal);
+	printf("cheguei em %s\n", p->nonTerminal);
 	if( strcmp(p->nonTerminal,"opbin") == 0 ){
 
 		//resolve primeiro filho
@@ -2249,7 +2250,7 @@ int geraCodeOpBin(tipoTree *p){
 		{
 			//Primeiro fator espera um resultado
 			if( p->filhos[0]->nonTerminal != NULL){
-				if ( strcmp(p->filhos[0]->nonTerminal, "exp") == 0 ){
+				if (strcmp(p->filhos[0]->nonTerminal, "exp") == 0 ){
 					geraCodeOpBin(p->filhos[0]->filhos[1]);
 				}
 				else{
@@ -2262,7 +2263,7 @@ int geraCodeOpBin(tipoTree *p){
 			else
 			{
 				if(p->filhos[0]->tokenNumber == NAME){
-					// printf("achei a var %s\n", p->filhos[0]->id);
+					printf("achei a var %s\n", p->filhos[0]->id);
 					listaVar *aux = consultaVar(vars, p->filhos[0]->id);
 					if (aux == NULL)
 						printf("Erro : var nao encontrada!!!!\n");
@@ -2274,7 +2275,7 @@ int geraCodeOpBin(tipoTree *p){
 					x = aux->varValue;
 				}
 				else{
-					// printf("entrei aqui dentro do %s\n", p->nonTerminal);
+					printf("entrei aqui dentro do %s\n", p->nonTerminal);
 					geraCodeOpBin(p->filhos[2]);
 					fprintf(yyout,"sw $a0, 0($sp)\n");
 					fprintf(yyout,"addiu $sp, $sp, -4\n");
@@ -2283,7 +2284,7 @@ int geraCodeOpBin(tipoTree *p){
 			}
 		}
 		if (p->filhos[2]->tokenNumber == NUMBER) {
-			// printf("cheguei aqui tbm hein\n");
+			printf("cheguei aqui tbm hein\n");
 			//Segundo fator eh um numero
 			fprintf(yyout,"li $a0, %d\n", p->filhos[2]->number);
 			fprintf(yyout,"sw $a0, 0($sp)\n");
@@ -2294,11 +2295,11 @@ int geraCodeOpBin(tipoTree *p){
 		{
 			if( p->filhos[2]->nonTerminal != NULL){
 				if ( strcmp(p->filhos[2]->nonTerminal, "exp") == 0 ){
-					// printf("entrou em exp\n");
+					printf("entrou em exp\n");
 					geraCodeOpBin(p->filhos[2]->filhos[1]);
 				}
 				else{
-					// printf("gerei aqui\n");
+					printf("gerei aqui\n");
 					geraCodeOpBin(p->filhos[2]);
 				}
 				fprintf(yyout,"sw $a0, 0($sp)\n");
@@ -2308,7 +2309,7 @@ int geraCodeOpBin(tipoTree *p){
 			else
 			{
 				if(p->filhos[2]->tokenNumber == NAME){
-					// printf("achei a var %s\n", p->filhos[2]->id);
+					printf("achei a var %s\n", p->filhos[2]->id);
 					listaVar *aux = consultaVar(vars, p->filhos[2]->id);
 					if (aux == NULL)
 						printf("Erro : var nao encontrada!!!!\n");
@@ -2321,7 +2322,7 @@ int geraCodeOpBin(tipoTree *p){
 					y = aux->varValue;
 				}
 				else{
-					// printf("entrei aqui dentro do %s\n", p->nonTerminal);
+					printf("entrei aqui dentro do %s\n", p->nonTerminal);
 					geraCodeOpBin(p->filhos[2]);
 					fprintf(yyout,"sw $a0, 0($sp)\n");
 					fprintf(yyout,"addiu $sp, $sp, -4\n");
@@ -2377,7 +2378,7 @@ int geraCodeOpBin(tipoTree *p){
 		}
 		else if(p->filhos[1]->tokenNumber == LT)
 		{
-			// printf("ta saindo da jaula\n");
+			printf("ta saindo da jaula\n");
 			fprintf(yyout, "slt $a0, $a0, $t1\n");
 		}
 		else if(p->filhos[1]->tokenNumber == AND)
@@ -2391,14 +2392,14 @@ int geraCodeOpBin(tipoTree *p){
 	}
 	else if(p->filhos[0]->tokenNumber == NUMBER)
 	{
-		// printf("achei o numero %d\n", p->filhos[0]->number);
+		printf("achei o numero %d\n", p->filhos[0]->number);
 		fprintf(yyout, "li $a0, %d\n",p->filhos[0]->number);
 		G_ACC = p->filhos[0]->number;
 		return 0;
 	}
 	else if(p->filhos[0]->tokenNumber == NAME){
 
-		// printf("achei a var %s\n", p->filhos[0]->id);
+		printf("achei a var %s\n", p->filhos[0]->id);
 		listaVar *aux = consultaVar(vars, p->filhos[0]->id);
 		if (aux == NULL)
 			printf("Erro : var nao encontrada!!!!\n");
@@ -2406,6 +2407,7 @@ int geraCodeOpBin(tipoTree *p){
 		fprintf(yyout, "lw $a0, %s\n", p->filhos[0]->id);
 
 		G_ACC = aux->varValue;
+		return 0;
 	}
 	else if( strcmp(p->nonTerminal,"opunaria") == 0 ){
 
@@ -2423,7 +2425,6 @@ int geraCodeOpBin(tipoTree *p){
 			else //if (G_ACC == 0)
 				fprintf(yyout, "li $a0, 1\n");
 		}
-
 		return 0;
 	}
 	else
@@ -2436,6 +2437,27 @@ int geraCodeOpBin(tipoTree *p){
 		}
 	}
 	return 0;
+}
+
+int nameOrNumber (tipoTree *p){
+	printf("foi aqui\n");
+	if(p->tokenNumber == NUMBER)
+	{
+		printf("achei o numero %d\n", p->number);
+		fprintf(yyout, "li $a0, %d\n",p->number);
+		G_ACC = p->number;
+	}
+	if(p->tokenNumber == NAME)
+	{
+		printf("achei a var %s\n", p->id);
+		listaVar *aux = consultaVar(vars, p->id);
+		if (aux == NULL)
+			printf("Erro : var nao encontrada!!!!\n");
+		else
+		fprintf(yyout, "lw $a0, %s\n", p->id);
+		G_ACC = aux->varValue;
+	}
+	printf("saiu nameOrNumber\n");
 }
 
 int trataVars(tipoTree *p){
@@ -2508,14 +2530,14 @@ int geraCode(tipoTree *p){
 	if(p->nonTerminal == NULL)
 		return 0;
 
-	// printf("entrei em %s\n", p->nonTerminal);
+	printf("entrei em %s\n", p->nonTerminal);
 
 	if( strcmp(p->nonTerminal, "chamadadefuncao") == 0 )
 	{
 		if( strcmp(p->filhos[0]->id, "print") == 0){
-			// printf("entrei no print\n");
+			printf("entrei no print\n");
 			geraCode(p->filhos[2]);
-			// printf("saiu print\n");
+			printf("saiu print\n");
 			fprintf(yyout, "li $v0, 1\n");
 			fprintf(yyout, "syscall\n");
 			fprintf(yyout, "li $v0, 4\n");
@@ -2586,12 +2608,18 @@ int geraCode(tipoTree *p){
 			// gerando codigo para instrucao for
 			// t0 armazena ate onde o for deve ir
 			if (strcmp(p->filhos[0]->id, "for") == 0) {
+				
 				cont_for++;
-				geraCodeOpBin(p->filhos[3]);
+				if(p->filhos[5]->nonTerminal != NULL)
+					geraCodeOpBin(p->filhos[3]);
+				else
+					nameOrNumber(p->filhos[3]);
 				printf("%d\n", G_ACC);
 				fprintf(yyout, "sw $a0, %s\n", p->filhos[1]->id);
-				geraCodeOpBin(p->filhos[5]);
-				printf("%s\n", p->filhos[5]->id);
+				if(p->filhos[5]->nonTerminal != NULL)
+					geraCodeOpBin(p->filhos[5]);
+				else
+					nameOrNumber(p->filhos[5]);
 				printf("%d\n", G_ACC);
 				fprintf(yyout, "move $a0, $t0\n");
 				// pegar terceiro parametro, se tiver
@@ -2635,17 +2663,17 @@ int geraCode(tipoTree *p){
 		{
 			if(p->filhos[1]->tokenNumber == ASSIGN)
 			{
-				// printf("entrei no assign\n");
+				printf("entrei no assign\n");
 				geraCodeOpBin(p->filhos[2]);
 				listaVar *aux;
 				int new_value = G_ACC;
-				// printf("saiu com valor: %d\n", new_value);
-				// printf("%s\n", p->filhos[0]->filhos[0]->id);
+				printf("saiu com valor: %d\n", new_value);
+				printf("%s\n", p->filhos[0]->filhos[0]->id);
 				aux = consultaVar(vars, p->filhos[0]->filhos[0]->id);
 				aux->varValue = new_value;
 				// fprintf(yyout, "li $a0, %d\n", new_value);
 				fprintf(yyout, "sw $a0, %s\n", p->filhos[0]->filhos[0]->id);
-				// printf("sai do assign\n");
+				printf("sai do assign\n");
 			}
 			return 0;
 		}
@@ -2659,7 +2687,7 @@ int geraCode(tipoTree *p){
 			}
 		}
 	}
-	// printf("terminei os filhos de %s\n", p->nonTerminal);
+	printf("terminei os filhos de %s\n", p->nonTerminal);
 }
 
 int main(int argc, char** argv){
